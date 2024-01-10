@@ -4,7 +4,9 @@
 #include <pthread.h>
 #include <stdio.h>
 
+
 int i = 0;
+pthread_mutex_t lock;
 
 // Note the return type: void*
 void* incrementingThreadFunction(){
@@ -12,7 +14,9 @@ void* incrementingThreadFunction(){
     int *p = &i;
     for (int j = 0; j < 1000000; j++)
     {
+        pthread_mutex_lock(&lock);
         (*p)++; 
+        pthread_mutex_unlock(&lock);
     }
     return NULL;
 }
@@ -21,9 +25,11 @@ void* decrementingThreadFunction(){
     // TODO: decrement i 1_000_000 times
 
     int *p = &i; 
-    for (int j = 0; j < 1000000; j++)
+    for (int j = 0; j < 999999; j++)
     {
+        pthread_mutex_lock(&lock);
         (*p)--; 
+        pthread_mutex_unlock(&lock);
     }
 
     return NULL;
@@ -33,6 +39,7 @@ void* decrementingThreadFunction(){
 int main(){
     pthread_t increment;
     pthread_t decrement;
+    pthread_mutex_init(&lock, NULL);
     
 
     // TODO: 
@@ -44,7 +51,7 @@ int main(){
     // Hint: Use `pthread_join`   
 
     int incrementResult = pthread_create(&increment, NULL, incrementingThreadFunction, NULL);
-    int decrementResult = pthread_create(&decrement, NULL, incrementingThreadFunction, NULL);
+    int decrementResult = pthread_create(&decrement, NULL, decrementingThreadFunction, NULL);
 
     if (incrementResult == 0) {
         // Successfully created the thread, now wait for it to finish
@@ -63,6 +70,7 @@ int main(){
     }
 
     // Your main program continues here
+    pthread_mutex_destroy(&lock);
     
     printf("The magic number is: %d\n", i);
     return 0;
