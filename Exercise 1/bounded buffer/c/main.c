@@ -24,7 +24,7 @@ struct BoundedBuffer* buf_new(int size){
     pthread_mutex_init(&buf->mtx, NULL);
     // TODO: initialize semaphores
     sem_init(&buf->capacity, 0, size);
-	sem_init(&buf->numElements, 0, 0);
+    sem_init(&buf->numElements, 0, 0);
     
     return buf;    
 }
