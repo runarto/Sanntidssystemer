@@ -11,8 +11,8 @@
 struct BoundedBuffer {
   struct RingBuffer *buf;
   pthread_mutex_t mtx;
-  sem_t empty;
-  sem_t full;
+  sem_t capacity;
+  sem_t numElements;
 };
 
 struct BoundedBuffer *buf_new(int size) {
@@ -21,8 +21,8 @@ struct BoundedBuffer *buf_new(int size) {
 
   pthread_mutex_init(&buf->mtx, NULL);
   // TODO: initialize semaphores
-  sem_init(&buf->empty, 0, size);
-  sem_init(&buf->full, 0, 0);
+  sem_init(&buf->capacity, 0, size);
+  sem_init(&buf->numElements, 0, 0);
 
   return buf;
 }
@@ -30,15 +30,15 @@ struct BoundedBuffer *buf_new(int size) {
 void buf_destroy(struct BoundedBuffer *buf) {
   rb_destroy(buf->buf);
   pthread_mutex_destroy(&buf->mtx);
-  sem_destroy(&buf->empty);
-  sem_destroy(&buf->full);
+  sem_destroy(&buf->capacity);
+  sem_destroy(&buf->numElements);
   free(buf);
 }
 
 void buf_push(struct BoundedBuffer *buf, int val) {
   // printf("buf_push: waiting for buffer capacity...\n");
 
-  sem_wait(&buf->empty);
+  sem_wait(&buf->capacity);
 
   pthread_mutex_lock(&buf->mtx);
 
@@ -46,7 +46,7 @@ void buf_push(struct BoundedBuffer *buf, int val) {
 
   rb_push(buf->buf, val);
 
-  sem_post(&buf->full);
+  sem_post(&buf->numElements);
   pthread_mutex_unlock(&buf->mtx);
   // printf("Buffer length: %d\n", buf->buf->length);
 }
@@ -54,14 +54,14 @@ void buf_push(struct BoundedBuffer *buf, int val) {
 int buf_pop(struct BoundedBuffer *buf) {
   // printf("buf_pop: waiting for available elements...\n");
 
-  sem_wait(&buf->full); // Check if there are elements in the buffer
+  sem_wait(&buf->numElements); // Check if there are elements in the buffer
   pthread_mutex_lock(&buf->mtx);
 
   // printf("buf_pop: locked mutex, popping value\n");
 
   int val = rb_pop(buf->buf);
 
-  sem_post(&buf->empty);
+  sem_post(&buf->capacity);
   pthread_mutex_unlock(&buf->mtx);
   // printf("Buffer capacity: %d\n", buf->buf->capacity);
   // printf("buf_pop: value popped and mutex unlocked, incremented capacity\n");

@@ -11,70 +11,67 @@ import (
 type Action int
 
 const (
-	Increment Action = iota
-	Decrement
-	Read
+	Increment Action = 0 // Enum for increment action
+	Decrement Action = 1 // Enum for decrement action
+	Read      Action = 2 // Enum for read action
 )
 
 type Message struct {
 	action   Action
-	response chan int // Used for Read action
+	response chan int // Channel for sending back the read value
 }
 
 var (
-	actionChan = make(chan Message)
-	doneChan   = make(chan bool)
+	actionChan = make(chan Message) // Channel for sending actions to the numberServer
+	doneChan   = make(chan bool)    // Channel to signal completion of incrementing/decrementing
 )
 
 func numberServer() {
-	var i int
+	var i int // The number being incremented or decremented
 	for {
-		msg := <-actionChan
+		msg := <-actionChan // Wait and receive a message from the channel
 		switch msg.action {
 		case Increment:
-			i++
+			i++ // Increment action
 		case Decrement:
-			i--
+			i-- // Decrement action
 		case Read:
-			msg.response <- i
+			msg.response <- i // Send the current value of i back through the channel
 		}
 	}
 }
 
 func incrementing() {
 	for j := 0; j < 1000000; j++ {
-		actionChan <- Message{action: Increment}
+		actionChan <- Message{action: Increment} // Send increment action 1 million times
 	}
-	doneChan <- true
+	doneChan <- true // Signal completion of incrementing
 }
 
 func decrementing() {
 	for j := 0; j < 999999; j++ {
-		actionChan <- Message{action: Decrement}
+		actionChan <- Message{action: Decrement} // Send decrement action 999999 times
 	}
-	doneChan <- true
+	doneChan <- true // Signal completion of decrementing
 }
 
 func main() {
-	// What does GOMAXPROCS do? What happens if you set it to 1?
-	runtime.GOMAXPROCS(1)
+	// GOMAXPROCS sets the maximum number of CPUs that can execute simultaneously
+	runtime.GOMAXPROCS(2)
 
-	// TODO: Spawn both functions as goroutines
-
+	// Starting the numberServer and incrementing/decrementing goroutines
 	go numberServer()
 	go incrementing()
 	go decrementing()
 
-	// Wait for both goroutines to finish
+	// Wait for both incrementing and decrementing goroutines to finish
 	<-doneChan
 	<-doneChan
 
-	responseChan := make(chan int)
-	actionChan <- Message{action: Read, response: responseChan}
-	i := <-responseChan
+	responseChan := make(chan int)                              // Channel to store value
+	actionChan <- Message{action: Read, response: responseChan} // Request to read the current value of i
+	i := <-responseChan                                         // Receive the value of i
 
-	// We have no direct way to wait for the completion of a goroutine (without additional synchronization of some sort)
-	// We will do it properly with channels soon. For now: Sleep.
 	time.Sleep(500 * time.Millisecond)
 	Println("The magic number is:", i)
 }
