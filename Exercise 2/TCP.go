@@ -1,77 +1,124 @@
 package main
 
 import (
-	"fmt"
 	"net"
-	"runtime"
-	"time"
+	"fmt"
+	"log"
+	"bufio"
+	"io"
 )
+func discoverTCPServerAddress() (string, error) {
+    return "10.100.23.129", nil
+}
 
-var serverIP = "10.100.23.129"
-var localIP = "10.100.23.20"
-var portFixedSizeMessage = 34933
-var portZeroTerminatedMessage = 33546
+func connectToTCPServer(serverAddr string, useFixedSize bool) {
+    var conn net.Conn
+    var err error
+    if useFixedSize {
+        conn, err = net.Dial("tcp", serverAddr+":34933")
+    } else {
+        conn, err = net.Dial("tcp", serverAddr+":33546")
+    }
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
 
-func receiveMessage(conn *net.TCPConn) {
+    // Read welcome message
+    buffer := make([]byte, 1024)
+    _, err = conn.Read(buffer)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(string(buffer))
+
+    // Send a message
+    message := "Hello, TCP Server!\x00" // Null-terminated message
+    _, err = conn.Write([]byte(message))
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Read echo
+    _, err = conn.Read(buffer)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Echo from server:", string(buffer))
+}
+
+func instructServerToConnectBack(serverAddr string) {
+    conn, err := net.Dial("tcp", serverAddr+":33546") // Assuming using delimited messages
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
+
+    localAddr := getLocalAddress() // Implement this function to get local IP
+    message := fmt.Sprintf("Connect to: %s:20000\x00", localAddr) // Replace 20000 with your listening port
+    _, err = conn.Write([]byte(message))
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
+func getLocalAddress() string {
+    // Implement logic to get local IP address
+    // This can be complex and environment-dependent
+    return "10.100.23.20" // Placeholder for the actual implementation
+}
+
+func startReverseConnectionServer() {
+    listener, err := net.Listen("tcp", "10.100.23.20:20000") // Use the same IP and port as in instructServerToConnectBack
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer listener.Close()
+
+    for {
+        conn, err := listener.Accept()
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        go handleConnection(conn) // Implement this function to handle the connection
+    }
+}
+
+func handleConnection(conn net.Conn) {
 	defer conn.Close()
 
-	buffer := make([]byte, 1024)
-
+	reader := bufio.NewReader(conn)
 	for {
-		n, err := conn.Read(buffer)
+		message, err := reader.ReadString('\x00') // Read until the null character
 		if err != nil {
-			fmt.Println("Error here")
-			fmt.Println("Error reading from TCP:", err)
-			continue
+			if err != io.EOF {
+				log.Printf("Error reading from connection: %v\n", err)
+			}
+			break
 		}
-		message := string(buffer[:n])
-		fmt.Println(message)
+
+		// Process the message (in this case, just log it)
+		fmt.Printf("Received message: %s\n", message)
+
+		// Echo the message back to the sender
+		_, err = conn.Write([]byte(message))
+		if err != nil {
+			log.Printf("Error writing to connection: %v\n", err)
+			break
+		}
 	}
 }
 
-func sendMSG(conn *net.TCPConn) {
-	fmt.Println("Connection established")
-	defer conn.Close()
-
-	data := []byte("Connect to: 10.100.23.20:33546\x00")
-	_, err := conn.Write(data)
-	if err != nil {
-		fmt.Println(err.Error())
-		fmt.Println("Oh no, error")
-	} else {
-		fmt.Println("Message sent")
-	}
-
-	message := []byte("Hello world")
-
-	for {
-		_, err := conn.Write(message)
-		if err != nil {
-			fmt.Println(err.Error())
-			fmt.Println("Oh no, error")
-		} else {
-			fmt.Println("Message sent")
-		}
-		time.Sleep(3 * time.Second)
-	}
-}
 
 func main() {
-	runtime.GOMAXPROCS(2)
+    serverAddr, err := discoverTCPServerAddress()
+	
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	sendingAddress := &net.TCPAddr{
-		Port: portZeroTerminatedMessage,
-		IP:   net.ParseIP(serverIP),
-	}
-
-	connSendTCP, err := net.DialTCP("tcp", nil, sendingAddress)
-	if err != nil {
-		fmt.Println("Error creating TCP connection:", err)
-		return
-	}
-
-	go receiveMessage(connSendTCP)
-	go sendMSG((connSendTCP))
-
-	time.Sleep(10 * time.Minute)
+    go connectToTCPServer(serverAddr, false) // false for delimited messages
+    go instructServerToConnectBack(serverAddr)
+    startReverseConnectionServer()
 }
