@@ -6,6 +6,7 @@ import (
     "globals"
     "requests"
     "FSM"
+    "time"
 )
 
 handleButtonEvent(btn elevio.ButtonEvent) {
@@ -19,42 +20,9 @@ handleButtonEvent(btn elevio.ButtonEvent) {
     }
 }
 
-func handleFloorEvent(floor int, MotorDirection *elevio.MotorDirection) {
-    fmt.Printf("Reached floor: %d\n", floor)
-    elevio.SetFloorIndicator(floor)
-    globals.LastDefinedFloor = floor
 
-    // Example logic: Determine if the elevator should stop at this floor
-    ''
-    if requests.OrderComplete() > 0 {
-        FSM.elevatorStill()
-        FSM.elevatorDoorState(globals.Open)
-        // wait x seconds
-        FSM.elevatorDoorState(globals.Close)
-    }
-
-}
-
-func handleObstructionEvent(obstr bool, MotorDirection *elevio.MotorDirection) {
-    if obstr {
-        fmt.Println("Obstruction detected")
-        *d = elevio.MD_Stop
-        elevatorDoorState(globals.Open)
-    } else {
-        fmt.Println("Obstruction cleared")
-        // Resume operation if necessary
-    }
-}
-
-
-func handleStopEvent(stop bool) {
-    if stop {
-        fmt.Println("Stop button pressed")
-        stopElevator()
-    } else {
-        fmt.Println("Stop button released")
-        // Resume normal operation if needed
-    }
+func handleObstructionEvent() {
+    requests.Obstruction()
 }
 
 
@@ -83,13 +51,37 @@ func main() {
     for {
         select {
         case btn := <-drv_buttons:
-            handleButtonEvent(btn)
+
+            if btn == elevio.BT_Cab {
+                requests.addToQueueCab(btn.floor)
+                elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
+            } else {
+                requests.addToQueueFromFloorPanel(btn.floor, btn.Button)
+                elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
+        
+            }
+
         case floor := <-drv_floors:
-            handleFloorEvent(floor, &MotorDirection)
+
+            switch (globals.CurrentState) {
+            case globals.Moving:
+                if requests.orderCompleteCheck() != 0 {
+                    FSM.elevatorStill()
+                    FSM.elevatorDoorState(globals.Open)
+                    time.Sleep(3 * time.Second) // Delay in Go
+                    FSM.elevatorDoorState(globals.Close)
+                }
+                break; 
+            
+            case.globals.Still:
+                moveElevator(requests.elevatorDirection())
+                break
+            }
+
         case obstr := <-drv_obstr:
-            handleObstructionEvent(obstr, &MotorDirection)
+            handleObstructionEvent()
         case stop := <-drv_stop:
-            handleStopEvent(stop)
+            FSM.stopElevator()
         }
     }
 }
