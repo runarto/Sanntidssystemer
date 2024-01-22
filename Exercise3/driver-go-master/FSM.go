@@ -4,6 +4,7 @@ package main
 import (
     "fmt"
     "Exercise3/elevio"
+    "time"
 )
 
 
@@ -21,16 +22,15 @@ func nullButtons() {
 func initElevator() {
     nullButtons()
     elevatorDoorState(Close)
-    floor := elevio.GetFloor()
-
-
-    for elevio.GetFloor() != 0 {
+    
+    for floor := elevio.GetFloor(); floor != 0; floor = elevio.GetFloor() {
         if floor > 0 || floor == -1 {
             moveElevator(elevio.MD_Down)
             CurrentDirection = elevio.MD_Down
         }
-        elevatorStill()
+        time.Sleep(100 * time.Millisecond) // This delay allows the elevator to move and the floor sensor to update
     }
+    elevatorStill()
     fmt.Println("Elevator is ready for use")
 }
 
@@ -82,5 +82,7 @@ func moveElevator(Direction elevio.MotorDirection) {
         CurrentDirection = int(Direction);
         CurrentState = Moving;
         fmt.Println("Now moving up\n");
+    } else {
+        elevio.SetMotorDirection(elevio.MD_Stop)
     }
 }

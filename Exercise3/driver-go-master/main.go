@@ -15,9 +15,11 @@ func main() {
 
     // Initialize the elevator
     elevio.Init("localhost:15657", numFloors)
+
     initElevator()
     initializeQueue()
     nullButtons()
+    
     fmt.Println("inint")
 
     // Create channels for handling events
