@@ -17,7 +17,8 @@ func nullButtons() {
     }
 }
 
-func initElevator() {
+
+/* func initElevator() {
     nullButtons()
     elevatorDoorState(Close)
     floor := elevio.GetFloor()
@@ -31,7 +32,7 @@ func initElevator() {
         elevatorStill()
     }
     fmt.Println("Elevator is ready for use")
-}
+} */
 
 
 func elevatorDoorState(state int) {

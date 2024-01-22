@@ -11,9 +11,14 @@ import (
 func main() {
     numFloors := 4
 
+
+
     // Initialize the elevator
     elevio.Init("localhost:15657", numFloors)
     //var d elevio.MotorDirection = elevio.MD_Up
+    initializeQueue()
+    nullButtons()
+    fmt.Println("inint")
 
     // Create channels for handling events
     drv_buttons := make(chan elevio.ButtonEvent)
@@ -40,15 +45,19 @@ func main() {
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
         
             }
+            
+            printOrderArray()
 
         case floor := <-drv_floors:
 
-            if floor == -1 || floor == 0 {
-                fmt.Println("lol")
-            }
+            LastDefinedFloor = floor
+            floorLights()
 
             switch (CurrentState) {
             case Moving:
+
+                checkNewOrders()
+
                 if orderCompleteCheck() != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
@@ -57,6 +66,8 @@ func main() {
                 }
             
             case Still:
+
+                checkNewOrders()
                 moveElevator(elevatorDirection())
             }
 
