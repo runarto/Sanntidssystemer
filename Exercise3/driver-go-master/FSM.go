@@ -71,19 +71,19 @@ func floorLights() {
 }
 
 func moveElevator(Direction elevio.MotorDirection) {
-    if (Direction == elevio.MD_Down) {
-        elevio.SetMotorDirection(elevio.MD_Down);
-        CurrentDirection = Up;
-        CurrentState = Moving;
-        fmt.Println("Now moving down\n");
-    }
-    if (Direction == elevio.MD_Up) {
-        elevio.SetMotorDirection(elevio.MD_Up);
-        CurrentDirection = Down;
-        CurrentState = Moving;
-        fmt.Println("Now moving up\n");
+    if Direction == elevio.MD_Down {
+        elevio.SetMotorDirection(elevio.MD_Down)
+        CurrentDirection = Down // This should be Down, not Up
+        CurrentState = Moving
+        fmt.Println("Now moving down\n") // The \n is unnecessary as Println already adds a new line
+    } else if Direction == elevio.MD_Up { // Changed this to an else if to fix the logic
+        elevio.SetMotorDirection(elevio.MD_Up)
+        CurrentDirection = Up // This should be Up, not Down
+        CurrentState = Moving
+        fmt.Println("Now moving up\n")
     } else {
         elevio.SetMotorDirection(elevio.MD_Stop)
         CurrentState = Still
+        fmt.Println("Elevator stopped")
     }
 }
