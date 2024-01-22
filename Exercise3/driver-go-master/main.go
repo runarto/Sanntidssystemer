@@ -19,8 +19,8 @@ func main() {
     initElevator()
     initializeQueue()
     nullButtons()
-    
-    fmt.Println("inint")
+
+    fmt.Println("Initialized")
 
     // Create channels for handling events
     drv_buttons := make(chan elevio.ButtonEvent)
@@ -49,6 +49,22 @@ func main() {
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
         
             }
+
+            switch (CurrentState) {
+            case Moving:
+
+                if orderCompleteCheck() != 0 {
+                    elevatorStill()
+                    elevatorDoorState(Open)
+                    time.Sleep(3 * time.Second) // Delay in Go
+                    elevatorDoorState(Close)
+                }
+            
+            case Still:
+
+                moveElevator(elevatorDirection())
+            }
+
             
             printOrderArray()
 
@@ -61,7 +77,25 @@ func main() {
             switch (CurrentState) {
             case Moving:
 
-                checkNewOrders()
+                if orderCompleteCheck() != 0 {
+                    elevatorStill()
+                    elevatorDoorState(Open)
+                    time.Sleep(3 * time.Second) // Delay in Go
+                    elevatorDoorState(Close)
+                }
+            
+            case Still:
+
+                moveElevator(elevatorDirection())
+            }
+
+        case obstr := <-drv_obstr:
+            if obstr {
+                Obstruction()
+            }
+
+            switch (CurrentState) {
+            case Moving:
 
                 if orderCompleteCheck() != 0 {
                     elevatorStill()
@@ -72,14 +106,10 @@ func main() {
             
             case Still:
 
-                checkNewOrders()
                 moveElevator(elevatorDirection())
             }
 
-        case obstr := <-drv_obstr:
-            if obstr {
-                Obstruction()
-            }
+
         case stop := <-drv_stop:
             if stop {
                 stopElevator()

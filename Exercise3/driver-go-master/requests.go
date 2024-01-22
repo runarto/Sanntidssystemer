@@ -76,7 +76,7 @@ func addToQueueCab(toFloor int) {
     }
 }
 
-func checkNewOrders() {
+/* func checkNewOrders() {
 	for f := 0; f < numFloors; f++ {
 		for b := 0; b < numButtons; b++ {
 			btnPressed := elevio.GetButton(elevio.ButtonType(b),f)
@@ -93,7 +93,7 @@ func checkNewOrders() {
 			}
 		}
 	}
-}
+} */
 
 func orderCompleteCheck() int {
 	OrderComplete := 0

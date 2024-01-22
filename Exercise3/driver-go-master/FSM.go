@@ -28,7 +28,7 @@ func initElevator() {
             moveElevator(elevio.MD_Down)
             CurrentDirection = elevio.MD_Down
         }
-        time.Sleep(2 * time.Second)
+        time.Sleep(100 * time.Millisecond)
     }
     elevatorStill()
     fmt.Println("Elevator is ready for use")
