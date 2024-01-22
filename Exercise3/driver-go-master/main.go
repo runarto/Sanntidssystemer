@@ -15,7 +15,7 @@ func main() {
 
     // Initialize the elevator
     elevio.Init("localhost:15657", numFloors)
-    //var d elevio.MotorDirection = elevio.MD_Up
+    initElevator()
     initializeQueue()
     nullButtons()
     fmt.Println("inint")
@@ -37,6 +37,8 @@ func main() {
         select {
         case btn := <-drv_buttons:
 
+
+            fmt.Println("New order.")
             if btn.Button == elevio.BT_Cab {
                 addToQueueCab(btn.Floor)
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
@@ -50,6 +52,7 @@ func main() {
 
         case floor := <-drv_floors:
 
+            fmt.Println("Arrived at new floor")
             LastDefinedFloor = floor
             floorLights()
 
