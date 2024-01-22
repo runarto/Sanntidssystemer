@@ -2,18 +2,9 @@ package main
 
 import (
     "fmt"
-    "elevio"
-    "globals"
-    "requests"
-    "FSM"
+    "Exercise3/elevio"
     "time"
 )
-
-
-
-
-
-
 
 
 
@@ -22,7 +13,7 @@ func main() {
 
     // Initialize the elevator
     elevio.Init("localhost:15657", numFloors)
-    var d elevio.MotorDirection = elevio.MD_Up
+    //var d elevio.MotorDirection = elevio.MD_Up
 
     // Create channels for handling events
     drv_buttons := make(chan elevio.ButtonEvent)
@@ -41,36 +32,42 @@ func main() {
         select {
         case btn := <-drv_buttons:
 
-            if btn == elevio.BT_Cab {
-                requests.addToQueueCab(btn.floor)
-                elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
+            if btn.Button == elevio.BT_Cab {
+                addToQueueCab(btn.Floor)
+                elevio.SetButtonLamp(btn.Button, btn.Floor, true)
             } else {
-                requests.addToQueueFromFloorPanel(btn.floor, btn.Button)
-                elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
+                addToQueueFromFloorPanel(btn.Floor, btn.Button)
+                elevio.SetButtonLamp(btn.Button, btn.Floor, true)
         
             }
 
         case floor := <-drv_floors:
 
-            switch (globals.CurrentState) {
-            case globals.Moving:
-                if requests.orderCompleteCheck() != 0 {
-                    FSM.elevatorStill()
-                    FSM.elevatorDoorState(globals.Open)
+            if floor == -1 || floor == 0 {
+                fmt.Println("lol")
+            }
+
+            switch (CurrentState) {
+            case Moving:
+                if orderCompleteCheck() != 0 {
+                    elevatorStill()
+                    elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
-                    FSM.elevatorDoorState(globals.Close)
+                    elevatorDoorState(Close)
                 }
-                break; 
             
-            case.globals.Still:
-                moveElevator(requests.elevatorDirection())
-                break
+            case Still:
+                moveElevator(elevatorDirection())
             }
 
         case obstr := <-drv_obstr:
-            requests.Obstruction()
+            if obstr {
+                Obstruction()
+            }
         case stop := <-drv_stop:
-            FSM.stopElevator()
+            if stop {
+                stopElevator()
+            }
         }
     }
 }
