@@ -28,7 +28,7 @@ func initElevator() {
             moveElevator(elevio.MD_Down)
             CurrentDirection = elevio.MD_Down
         }
-        time.Sleep(100 * time.Millisecond) // This delay allows the elevator to move and the floor sensor to update
+        time.Sleep(2 * time.Second)
     }
     elevatorStill()
     fmt.Println("Elevator is ready for use")
@@ -72,17 +72,18 @@ func floorLights() {
 
 func moveElevator(Direction elevio.MotorDirection) {
     if (Direction == elevio.MD_Down) {
-        elevio.SetMotorDirection(Direction);
-        CurrentDirection = int(Direction);
+        elevio.SetMotorDirection(elevio.MD_Down);
+        CurrentDirection = Up;
         CurrentState = Moving;
         fmt.Println("Now moving down\n");
     }
     if (Direction == elevio.MD_Up) {
-        elevio.SetMotorDirection(Direction);
-        CurrentDirection = int(Direction);
+        elevio.SetMotorDirection(elevio.MD_Up);
+        CurrentDirection = Down;
         CurrentState = Moving;
         fmt.Println("Now moving up\n");
     } else {
         elevio.SetMotorDirection(elevio.MD_Stop)
+        CurrentState = Still
     }
 }
