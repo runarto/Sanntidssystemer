@@ -4,6 +4,7 @@ import (
     "fmt"
     "Exercise3/elevio"
     "time"
+    "sync"
 )
 
 
@@ -16,11 +17,24 @@ func main() {
     // Initialize the elevator
     elevio.Init("localhost:15657", numFloors)
 
-    initElevator()
-    initializeQueue()
-    nullButtons()
+    var wg sync.WaitGroup
 
-    fmt.Println("Initialized")
+    // Add 2 to the WaitGroup for the two functions you want to wait for
+    wg.Add(2)
+
+    go func() {
+        defer wg.Done() // Signal that initElevator() is done
+        initElevator()
+    }()
+
+    // Start a goroutine for initializeQueue()
+    go func() {
+        defer wg.Done() // Signal that initializeQueue() is done
+        initializeQueue()
+    }()
+
+    // Wait for both functions to complete
+    wg.Wait()
 
     // Create channels for handling events
     drv_buttons := make(chan elevio.ButtonEvent)
@@ -115,5 +129,3 @@ func main() {
         }
     }
 }
-
-// Define additional functions like handleButtonEvent, handleFloorEvent, etc.
