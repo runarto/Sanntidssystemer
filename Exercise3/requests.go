@@ -1,8 +1,8 @@
-package requests
+package main
 
 import "globals.go"
 import "fmt"
-import "Driver-go/elevio"
+import "elevio"
 
 func initializeQueue() {
     for i := range globals.OrderArray {

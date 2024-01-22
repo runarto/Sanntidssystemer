@@ -1,8 +1,3 @@
-
-
-require Driver-go v0.0.0
-replace Driver-go => ./go.mod
-
-module Driver-go
+module Exercise3
 
 go 1.16

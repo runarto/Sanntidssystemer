@@ -9,21 +9,10 @@ import (
     "time"
 )
 
-handleButtonEvent(btn elevio.ButtonEvent) {
-    if btn.Button == elevio.BT_Cab {
-        requests.addToQueueCab(btn.floor)
-        elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
-    } else {
-        requests.addToQueueFromFloorPanel(btn.floor, btn.Button)
-        elevio.SetButtonLamp(btn.Button, btn.floor, globals.On)
-
-    }
-}
 
 
-func handleObstructionEvent() {
-    requests.Obstruction()
-}
+
+
 
 
 
@@ -79,7 +68,7 @@ func main() {
             }
 
         case obstr := <-drv_obstr:
-            handleObstructionEvent()
+            requests.Obstruction()
         case stop := <-drv_stop:
             FSM.stopElevator()
         }
