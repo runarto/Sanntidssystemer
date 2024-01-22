@@ -80,7 +80,7 @@ func checkNewOrders() {
 	for f := 0; f < numFloors; f++ {
 		for b := 0; b < numButtons; b++ {
 			btnPressed := elevio.GetButton(elevio.ButtonType(b),f)
-			if btnPressed == true && f != elevio.GetFloor() {
+			if btnPressed && f != elevio.GetFloor() {
 				fmt.Println("Button was pressed");
 				elevio.SetButtonLamp(elevio.ButtonType(b), f, On)
 				if b == elevio.BT_Cab {
@@ -127,15 +127,16 @@ func removeOrdersAtFloor(floor int) int {
 				elevio.SetButtonLamp(elevio.ButtonType(OrderArray[i][1]), floor, Off)
 				OrderComplete++
             }
-		}
-
-		for j := 0; j < 3; j++ {
-			OrderArray[i][j] = NotDefined
-			return OrderComplete
+            
+            for j := 0; j < 3; j++ {
+                OrderArray[i][j] = NotDefined
+            }
 		}
 	}
-    return 0
+
+	return OrderComplete
 }
+
 
 func amountOfOrders() int {
     orderAmount := 0
@@ -182,7 +183,7 @@ func elevatorDirection() elevio.MotorDirection {
 
 
 func Obstruction() {
-    for elevio.GetObstruction() == true {
+    for elevio.GetObstruction() {
         elevio.SetDoorOpenLamp(On)
     }
 
