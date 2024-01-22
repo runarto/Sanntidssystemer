@@ -157,27 +157,32 @@ func elevatorDirection() elevio.MotorDirection {
         if CurrentDirection == Up {
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] > LastDefinedFloor && OrderArray[i][0] != NotDefined {
+                    fmt.Println("Elevator go up")
                     return elevio.MD_Up
                 }
             }
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] != NotDefined {
+                    fmt.Println("Elevator go down")
                     return elevio.MD_Down
                 }
             }
         } else if CurrentDirection == Down {
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] < LastDefinedFloor && OrderArray[i][0] != NotDefined {
+                    fmt.Println("Elevator go down")
                     return elevio.MD_Down
                 }
             }
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] != NotDefined {
+                    fmt.Println("Elevator go up")
                     return elevio.MD_Up
                 }
             }
         }
     }
+    fmt.Println("oops, elevator has no orders")
     return elevio.MD_Stop
 }
 
