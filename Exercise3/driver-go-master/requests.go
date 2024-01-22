@@ -182,6 +182,7 @@ func elevatorDirection() elevio.MotorDirection {
 }
 
 
+
 func Obstruction() {
     for elevio.GetObstruction() {
         elevio.SetDoorOpenLamp(On)

@@ -43,12 +43,10 @@ func main() {
             fmt.Println("New order.")
             if btn.Button == elevio.BT_Cab {
                 addToQueueCab(btn.Floor)
-                elevio.SetButtonLamp(btn.Button, btn.Floor, true)
             } else {
                 addToQueueFromFloorPanel(btn.Floor, btn.Button)
-                elevio.SetButtonLamp(btn.Button, btn.Floor, true)
-        
             }
+            elevio.SetButtonLamp(btn.Button, btn.Floor, true)
 
             switch (CurrentState) {
             case Moving:
