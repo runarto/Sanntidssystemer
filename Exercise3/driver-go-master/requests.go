@@ -59,7 +59,6 @@ func addToQueueCab(toFloor int) {
            (OrderArray[i][1] == NotDefined) && 
            (OrderArray[i][2] == NotDefined) {
             OrderArray[i][0] = toFloor
-            fmt.Println("Check2")
 
             if (currentFloor < toFloor) || 
                ((currentFloor == toFloor) && 
@@ -67,6 +66,7 @@ func addToQueueCab(toFloor int) {
                 OrderArray[i][1] = CabUp
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
+                return
             }
 
             if (currentFloor > toFloor) || 
@@ -75,6 +75,7 @@ func addToQueueCab(toFloor int) {
                 OrderArray[i][1] = CabDown
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
+                return
             }
         }
     }
