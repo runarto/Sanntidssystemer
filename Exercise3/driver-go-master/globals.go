@@ -17,8 +17,10 @@ const (
     True            = 1
     False           = 0
     Cab             = 1
-    Up              = 1
-    Down            = -1
+    Up              = 0
+    Down            = 1
+    CabUp           = 0
+    CabDown         = 1
 )
 
 type State int
@@ -32,6 +34,7 @@ const (
 var (
     CurrentState      State
     CurrentDirection  int
+    CurrentDirectionAlt int
     LastDefinedFloor  int
     currentFloor      int
     IsDoorOpen        int

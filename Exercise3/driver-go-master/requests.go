@@ -9,9 +9,9 @@ import (
 
 func initializeQueue() {
     for i := range OrderArray {
-        OrderArray[i][0] = NotDefined
-        OrderArray[i][1] = NotDefined
-        OrderArray[i][2] = NotDefined
+        OrderArray[i][0] = NotDefined // etasje
+        OrderArray[i][1] = NotDefined // Opp/Ned (0/1) Opp = 0, Ned = 1
+        OrderArray[i][2] = NotDefined // cab (True/False)
     }
 }
 
@@ -28,10 +28,10 @@ func printOrderArray() {
 
 // fromFloor: etasje input kommer fra, button: type (opp, ned, cab)
 
-func addToQueueFromFloorPanel(fromFloor int, button int) {
+func addToQueueFromFloorPanel(fromFloor int, Direction int) {
     for i := 0; i < MaxOrders; i++ {
         if (OrderArray[i][0] == fromFloor) &&
-           (OrderArray[i][1] == button) {
+           (OrderArray[i][1] == Direction) {
             return
            }
 
@@ -39,7 +39,8 @@ func addToQueueFromFloorPanel(fromFloor int, button int) {
            (OrderArray[i][1] == NotDefined) && 
            (OrderArray[i][2] == NotDefined) {
             OrderArray[i][0] = fromFloor
-            OrderArray[i][1] = button
+            OrderArray[i][1] = Direction
+            OrderArray[i][2] = False
             return
         }
     }
@@ -62,16 +63,16 @@ func addToQueueCab(toFloor int) {
 
             if (LastDefinedFloor < toFloor) || 
                ((LastDefinedFloor == toFloor) && 
-                (CurrentDirection == ElevDown)) {
-                OrderArray[i][1] = Up
+                (CurrentDirectionAlt == ElevDown)) {
+                OrderArray[i][1] = CabUp
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
             }
 
             if (LastDefinedFloor > toFloor) || 
                (LastDefinedFloor == toFloor && 
-                CurrentDirection == ElevUp) {
-                OrderArray[i][1] = Down
+                CurrentDirectionAlt == ElevUp) {
+                OrderArray[i][1] = CabDown
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
             }
@@ -112,7 +113,7 @@ func checkOrderCompletion() int {
             if (fromCab == 1) {
                 processOrder(i, floor, 2)
                 completedOrders++
-            } else if (direction == CurrentDirection && CurrentDirection != 0) {
+            } else if (direction == CurrentDirectionAlt) {
                 processOrder(i, floor, direction)
                 completedOrders++
             } else if CurrentState == Still {
@@ -122,12 +123,12 @@ func checkOrderCompletion() int {
             } else {
             // General handling for orders from other floors
             switch {
-                case direction == Up && CurrentDirection != Down && floor < currentFloor:
+                case direction == Up && CurrentDirectionAlt != Down && floor < currentFloor:
                 // Handle an Up order when the elevator is above the order floor and not moving Down
                 processOrder(i, floor, direction)
                 completedOrders++
     
-                case direction == Down && CurrentDirection != Up && floor > currentFloor:
+                case direction == Down && CurrentDirectionAlt != Up && floor > currentFloor:
                 // Handle a Down order when the elevator is below the order floor and not moving Up
                 processOrder(i, floor, direction)
                 completedOrders++

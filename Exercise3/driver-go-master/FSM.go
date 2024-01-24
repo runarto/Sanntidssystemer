@@ -76,11 +76,13 @@ func moveElevator(Direction elevio.MotorDirection) {
     if Direction == elevio.MD_Down {
         elevio.SetMotorDirection(elevio.MD_Down)
         CurrentDirection = ElevDown
+        CurrentDirectionAlt = Down
         CurrentState = Moving
         fmt.Println("Now moving down") 
     } else if Direction == elevio.MD_Up {
         elevio.SetMotorDirection(elevio.MD_Up)
         CurrentDirection = ElevUp
+        CurrentDirectionAlt = Up
         CurrentState = Moving
         fmt.Println("Now moving up") 
     } else {
