@@ -9,14 +9,16 @@ const (
     Open            = 1
     Close           = 0
     NotDefined      = -1
-    Up              = 1
-    Down            = -1
+    ElevUp          = 1
+    ElevDown        = -1
+    FloorUp         = 0
+    FloorDown       = 1
+    FromCab         = 2
     numFloors       = 4
     numButtons      = 3
     Yes             = true
     No              = false
-    Cab            = 1
-    Hall           = 0
+    Cab             = 1
 )
 
 type State int

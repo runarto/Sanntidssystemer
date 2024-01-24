@@ -59,16 +59,16 @@ func addToQueueCab(toFloor int) {
 
             if (LastDefinedFloor < toFloor) || 
                (LastDefinedFloor == toFloor && 
-                CurrentDirection == Down) {
-                OrderArray[i][1] = Up
+                CurrentDirection == ElevDown) {
+                OrderArray[i][1] = FromCab
                 OrderArray[i][2] = Cab
                 fmt.Println("Order added successfully")
             }
 
             if (LastDefinedFloor > toFloor) || 
                (LastDefinedFloor == toFloor && 
-                CurrentDirection == Up) {
-                OrderArray[i][1] = Down
+                CurrentDirection == ElevUp) {
+                OrderArray[i][1] = FromCab
                 OrderArray[i][2] = Cab
                 fmt.Println("Order added successfully")
             }
@@ -103,10 +103,10 @@ func orderCompleteCheck(currentFloor int) int {
         fmt.Println("Floor of order:", OrderArray[i][0])
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
             fmt.Println("Type of order:", OrderArray[i][1])
-			if OrderArray[i][1] == Up && LastDefinedFloor < OrderArray[i][0] {
+			if CurrentDirection == ElevUp {
 				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
 			} 
-			if OrderArray[i][1] == Down && LastDefinedFloor > OrderArray[i][0] {
+			if CurrentDirection == ElevDown {
 				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
 			}
 		}
@@ -119,7 +119,7 @@ func orderCompleteCheck(currentFloor int) int {
 func removeOrdersAtFloor(floor int, entry int) int {
 	OrderComplete := 0
 	
-    if LastDefinedFloor != -1 && floor == OrderArray[entry][0] {
+    if floor != -1 && floor == OrderArray[entry][0] {
         if OrderArray[entry][2] == Cab {
             elevio.SetButtonLamp(elevio.BT_Cab, floor, Off)
             OrderComplete++
@@ -154,7 +154,7 @@ func amountOfOrders() int {
 
 func elevatorDirection() elevio.MotorDirection {
     if IsDoorOpen == Close && amountOfOrders() > 0 {
-        if CurrentDirection == Up {
+        if CurrentDirection == ElevUp {
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] > LastDefinedFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go up")
@@ -164,7 +164,7 @@ func elevatorDirection() elevio.MotorDirection {
                     return elevio.MD_Down
                 }
             }
-        } else if CurrentDirection == Down {
+        } else if CurrentDirection == ElevDown {
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] < LastDefinedFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go down")
