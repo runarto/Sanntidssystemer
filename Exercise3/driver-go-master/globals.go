@@ -33,6 +33,7 @@ var (
     CurrentState      State
     CurrentDirection  int
     LastDefinedFloor  int
+    currentFloor      int
     IsDoorOpen        int
     OrderComplete     bool
     OrderArray        [MaxOrders][3]int

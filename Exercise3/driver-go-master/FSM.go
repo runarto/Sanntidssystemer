@@ -31,6 +31,8 @@ func initElevator() {
         time.Sleep(100 * time.Millisecond)
     }
     elevatorStill()
+    currentFloor = elevio.GetFloor()
+    LastDefinedFloor = NotDefined
     fmt.Println("Elevator is ready for use")
 }
 
@@ -64,7 +66,8 @@ func elevatorStill() {
 func floorLights(floor int) {
     if (floor >= 0 && floor <= 3) {
         elevio.SetFloorIndicator(floor);
-        LastDefinedFloor = floor;
+        LastDefinedFloor = currentFloor
+        currentFloor = floor
     }
     
 }

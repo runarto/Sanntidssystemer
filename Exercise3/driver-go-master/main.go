@@ -56,31 +56,26 @@ func main() {
 
             fmt.Println("New order.")
             if btn.Button == elevio.BT_Cab {
-                addToQueueCab(btn.Floor)
-                fmt.Println("Order added from cab")
-            } else {
-                addToQueueFromFloorPanel(btn.Floor, btn.Button)
-                fmt.Println("Order added from ")
-            }
-            elevio.SetButtonLamp(btn.Button, btn.Floor, true)
 
-
-
-            switch (CurrentState) {
-            case Moving:
-
-                if orderCompleteCheck(LastDefinedFloor) != 0 {
+                if btn.Floor == currentFloor {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
                     elevatorDoorState(Close)
+                } else {
+                    addToQueueCab(btn.Floor)
+                    elevio.SetButtonLamp(btn.Button, btn.Floor, true)
+                    fmt.Println("Order added from cab")
                 }
-            
-            case Still:
 
-                moveElevator(elevatorDirection())
+            } else {
+                addToQueueFromFloorPanel(btn.Floor, btn.Button)
+                elevio.SetButtonLamp(btn.Button, btn.Floor, true)
+                fmt.Println("Order added from ")
             }
 
+
+            moveElevator(elevatorDirection())
             
             printOrderArray()
 
@@ -93,7 +88,7 @@ func main() {
             case Moving:
                 fmt.Println("Elevator arrived at floor while moving.")
 
-                if orderCompleteCheck(floor) != 0 {
+                if orderCompleteCheck() != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
@@ -114,7 +109,7 @@ func main() {
             switch (CurrentState) {
             case Moving:
 
-                if orderCompleteCheck(LastDefinedFloor) != 0 {
+                if orderCompleteCheck() != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
@@ -132,5 +127,6 @@ func main() {
                 stopElevator()
             }
         }
+        
     }
 }

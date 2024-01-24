@@ -96,69 +96,41 @@ func addToQueueCab(toFloor int) {
 	}
 } */
 
-func orderCompleteCheck(currentFloor int) int {
-	OrderComplete := 0
-    fmt.Println("The current floor is:", currentFloor)
-    fmt.Println("The current state is", CurrentState, ",and the direction is", CurrentDirection)
 
+func orderCompleteCheck() int {
+    OrderComplete := 0
 
-    switch (CurrentState) {
-    
-
-    case Moving:
-        switch (CurrentDirection) {
-
-        case Up:
-            for i := 0; i < MaxOrders; i++ {
-                if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
-                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                }  else if (OrderArray[i][1] == Down) && (currentFloor == OrderArray[i][0]) {
-                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                }  else if (OrderArray[i][2] == Cab) {
-                    OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
-                }
-            }
-
-        case Down: 
-            for i := 0; i < MaxOrders; i++ {
-                if (currentFloor == OrderArray[i][0]) {
-                    if (OrderArray[i][1] == Down) {
-                        OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                    } else if (OrderArray[i][1] == Up) {
-                        OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                    } else if (OrderArray[i][2] == Cab) {
-                        OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
-                    }
-                }
+    currentFloor := elevio.GetFloor() // Assuming elevio.FloorSensor() returns the current floor
+    for i := 0; i < MaxOrders; i++ {
+        if currentFloor != -1 && currentFloor == OrderArray[i][0] {
+            if OrderArray[i][1] == Up && LastDefinedFloor < OrderArray[i][0] {
+                OrderComplete = removeOrdersAtFloor(OrderArray[i][0])
+                break
+            } else if OrderArray[i][1] == Down && LastDefinedFloor > OrderArray[i][0] {
+                OrderComplete = removeOrdersAtFloor(OrderArray[i][0])
+                break
             }
         }
-
-    case Still:
-
-        for i := 0; i < MaxOrders; i++ {
-            if (currentFloor == OrderArray[i][0]) {
-                OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                OrderComplete = OrderComplete + removeOrder(OrderArray[i][2], i, currentFloor)
-            }
-        }
-
-
     }
-	return OrderComplete
+    return OrderComplete
 }
 
-
-func removeOrder(ButtonType int, entry int, currentFloor int) int {
-	OrderComplete := 0
-
-    elevio.SetButtonLamp(elevio.ButtonType(ButtonType), currentFloor, Off)
-
-    for j := 0; j < 3; j++ {
-        OrderArray[entry][j] = NotDefined
+func removeOrdersAtFloor(floor int) int {
+    OrderComplete := 0
+    for i := 0; i < MaxOrders; i++ {
+        if elevio.GetFloor() != -1 && floor == OrderArray[i][0] {
+            if OrderArray[i][2] == True {
+                elevio.SetButtonLamp(elevio.ButtonType(2), floor, Off)
+            } else {
+                elevio.SetButtonLamp(elevio.ButtonType(OrderArray[i][1]), floor, Off)
+            }
+            for j := 0; j < 3; j++ {
+                OrderArray[i][j] = NotDefined
+            }
+            return OrderComplete
+        }
     }
-	
-    OrderComplete++
-	return OrderComplete
+    return OrderComplete
 }
 
 
