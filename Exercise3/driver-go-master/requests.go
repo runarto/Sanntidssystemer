@@ -100,6 +100,7 @@ func orderCompleteCheck(currentFloor int) int {
 
 	for i := 0; i < MaxOrders; i++ {
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
+            fmt.Println("Floor asserted")
 			if OrderArray[i][1] == Up && LastDefinedFloor < OrderArray[i][0] {
 				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
 			} 
