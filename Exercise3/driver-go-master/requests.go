@@ -105,41 +105,24 @@ func checkOrderCompletion() int {
 
     for i := 0; i < MaxOrders; i++ {
         orderFloor := OrderArray[i][0]
-        Direction := OrderArray[i][1] // 1 (ned) // currentDirectionAlt = 0
-        fromCab := OrderArray[i][2]
-    
-        // Check if the current floor matches the order floor
-        if currentFloor == orderFloor {
-            if (fromCab == 1) {
-                processOrder(i, orderFloor, 2)
-                completedOrders++
-            } else if (Direction == CurrentDirectionAlt) {
-                processOrder(i, orderFloor, Direction)
-                completedOrders++
-            } else if CurrentState == Still {
-                processOrder(i, orderFloor, 0)
-                processOrder(i, orderFloor, 1)
-                completedOrders++
-            // Existing logic for handling orders on the current floor
-            } else {
-            // General handling for orders from other floors
-            switch {
-                case Direction == Up && CurrentDirectionAlt != Down && orderFloor < currentFloor:
-                // Handle an Up order when the elevator is above the order floor and not moving Down
-                processOrder(i, orderFloor, Direction)
-                completedOrders++
-    
-                case Direction == Down && CurrentDirectionAlt != Up && orderFloor > currentFloor:
-                print("here")
-                // Handle a Down order when the elevator is below the order floor and not moving Up
-                processOrder(i, orderFloor, Direction)
-                completedOrders++
-                }
-            }
+        //direction := OrderArray[i][1]   // 0 for up, 1 for down
+        fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
+
+        // Process orders from the cab
+        if fromCab == 1 && currentFloor == orderFloor {
+            processOrder(i, orderFloor, 2) // Process the cab order
+            completedOrders++
+            continue // Move to the next order
         }
+
+        // Additional logic for handling other orders will be added here...
     }
+
     return completedOrders
 }
+
+// Additional functions like processOrder will be defined here...
+
     
 func processOrder(index int, floor int, direction int) {
         elevio.SetButtonLamp(elevio.ButtonType(direction), floor, Off)
