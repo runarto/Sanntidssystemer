@@ -19,7 +19,9 @@ func initializeQueue() {
 func printOrderArray() {
     for i := 0; i < MaxOrders; i++ {
         for j := 0; j < 3; j++ {
-            fmt.Println(OrderArray[i][j])
+            if (OrderArray[i][0] != NotDefined) {
+                fmt.Println(OrderArray[i][j])
+                }
         }
     }
 }
@@ -98,7 +100,6 @@ func addToQueueCab(toFloor int) {
 
 
 func checkOrderCompletion() int {
-
     completedOrders := 0
 
     for i := 0; i < MaxOrders; i++ {
@@ -108,33 +109,31 @@ func checkOrderCompletion() int {
 
         // Check if the current floor matches the order floor
         if currentFloor == floor {
-            // Check if the order is from the cab or if the direction matches
-            if (fromCab == 1) {
-                // If the elevator is moving in the direction of the order
-                // or the order is from the cab, and it's on the correct floor
+            // Process the order if it's from the cab, or if the elevator's direction matches the order's direction
+            if fromCab == 1 || (direction == CurrentDirection && CurrentDirection != 0) {
                 elevio.SetButtonLamp(elevio.ButtonType(2), floor, Off)
                 removeOrder(i)
                 completedOrders++
-                
-            } else if direction == CurrentDirection && CurrentDirection != 0 {
-
-                elevio.SetButtonLamp(elevio.ButtonType(direction), floor, Off)
-                removeOrder(i)
-                completedOrders++
-
-
-
             } else if CurrentState == Still {
-                // Check if the elevator is stationary but on the correct floor
+                // If the elevator is stationary, process any order on the current floor
                 elevio.SetButtonLamp(elevio.ButtonType(2), floor, Off)
                 removeOrder(i)
                 completedOrders++
             }
+        } else if (currentFloor-1 == floor && direction == Up && CurrentDirection != Down) || 
+                  (currentFloor+1 == floor && direction == Down && CurrentDirection != Up) {
+            // Special handling for orders from adjacent floors where direction matches the intended travel
+            // This check avoids picking up passengers who want to go in the opposite direction
+            elevio.SetButtonLamp(elevio.ButtonType(direction), floor, Off)
+            removeOrder(i)
+            completedOrders++
         }
     }
 
     return completedOrders
 }
+
+
 
 func removeOrder(index int) {
     // Set all elements of the order to an 'empty' or 'inactive' state
