@@ -61,17 +61,17 @@ func addToQueueCab(toFloor int) {
             OrderArray[i][0] = toFloor
             fmt.Println("Check2")
 
-            if (LastDefinedFloor < toFloor) || 
-               ((LastDefinedFloor == toFloor) && 
-                (CurrentDirectionAlt == ElevDown)) {
+            if (currentFloor < toFloor) || 
+               ((currentFloor == toFloor) && 
+                (CurrentDirectionAlt == Down)) {
                 OrderArray[i][1] = CabUp
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
             }
 
-            if (LastDefinedFloor > toFloor) || 
-               (LastDefinedFloor == toFloor && 
-                CurrentDirectionAlt == ElevUp) {
+            if (currentFloor > toFloor) || 
+               (currentFloor == toFloor && 
+                CurrentDirectionAlt == Up) {
                 OrderArray[i][1] = CabDown
                 OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
