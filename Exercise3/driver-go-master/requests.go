@@ -121,12 +121,14 @@ func orderCompleteCheck(currentFloor int) int {
 
         case Down: 
             for i := 0; i < MaxOrders; i++ {
-                if (OrderArray[i][1] == Down) && (currentFloor == OrderArray[i][0]) {
-                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                }  else if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
-                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                } else if (OrderArray[i][2] == Cab) {
-                    OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
+                if (currentFloor == OrderArray[i][0]) {
+                    if (OrderArray[i][1] == Down) {
+                        OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                    } else if (OrderArray[i][1] == Up) {
+                        OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                    } else if (OrderArray[i][2] == Cab) {
+                        OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
+                    }
                 }
             }
         }
