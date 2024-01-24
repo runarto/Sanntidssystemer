@@ -88,7 +88,7 @@ func main() {
             case Moving:
                 fmt.Println("Elevator arrived at floor while moving.")
 
-                if orderCompleteCheck() != 0 {
+                if checkOrderCompletion() > 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
@@ -109,7 +109,7 @@ func main() {
             switch (CurrentState) {
             case Moving:
 
-                if orderCompleteCheck() != 0 {
+                if checkOrderCompletion() > 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go

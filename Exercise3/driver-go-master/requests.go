@@ -47,7 +47,7 @@ func addToQueueCab(toFloor int) {
     for i := 0; i < MaxOrders; i++ {
 
         if (OrderArray[i][0] == toFloor) &&
-           (OrderArray[i][2] == Cab) {
+           (OrderArray[i][2] == True) {
          return
         }
 
@@ -97,42 +97,51 @@ func addToQueueCab(toFloor int) {
 } */
 
 
-func orderCompleteCheck() int {
-    OrderComplete := 0
+func checkOrderCompletion() int {
 
-    currentFloor := elevio.GetFloor() // Assuming elevio.FloorSensor() returns the current floor
-    for i := 0; i < MaxOrders; i++ {
-        if currentFloor != -1 && currentFloor == OrderArray[i][0] {
-            if OrderArray[i][1] == Up && LastDefinedFloor < OrderArray[i][0] {
-                OrderComplete = removeOrdersAtFloor(OrderArray[i][0])
-                break
-            } else if OrderArray[i][1] == Down && LastDefinedFloor > OrderArray[i][0] {
-                OrderComplete = removeOrdersAtFloor(OrderArray[i][0])
-                break
-            }
-        }
-    }
-    return OrderComplete
-}
+    completedOrders := 0
 
-func removeOrdersAtFloor(floor int) int {
-    OrderComplete := 0
     for i := 0; i < MaxOrders; i++ {
-        if elevio.GetFloor() != -1 && floor == OrderArray[i][0] {
-            if OrderArray[i][2] == True {
+        floor := OrderArray[i][0]
+        direction := OrderArray[i][1]
+        fromCab := OrderArray[i][2]
+
+        // Check if the current floor matches the order floor
+        if currentFloor == floor {
+            // Check if the order is from the cab or if the direction matches
+            if (fromCab == 1) {
+                // If the elevator is moving in the direction of the order
+                // or the order is from the cab, and it's on the correct floor
                 elevio.SetButtonLamp(elevio.ButtonType(2), floor, Off)
-            } else {
-                elevio.SetButtonLamp(elevio.ButtonType(OrderArray[i][1]), floor, Off)
+                removeOrder(i)
+                completedOrders++
+                
+            } else if direction == CurrentDirection && CurrentDirection != 0 {
+
+                elevio.SetButtonLamp(elevio.ButtonType(direction), floor, Off)
+                removeOrder(i)
+                completedOrders++
+
+
+
+            } else if CurrentState == Still {
+                // Check if the elevator is stationary but on the correct floor
+                elevio.SetButtonLamp(elevio.ButtonType(2), floor, Off)
+                removeOrder(i)
+                completedOrders++
             }
-            for j := 0; j < 3; j++ {
-                OrderArray[i][j] = NotDefined
-            }
-            return OrderComplete
         }
     }
-    return OrderComplete
+
+    return completedOrders
 }
 
+func removeOrder(index int) {
+    // Set all elements of the order to an 'empty' or 'inactive' state
+    OrderArray[index][0] = NotDefined // Assuming -1 indicates an inactive order
+    OrderArray[index][1] = NotDefined
+    OrderArray[index][2] = NotDefined
+}
 
 func amountOfOrders() int {
     orderAmount := 0
