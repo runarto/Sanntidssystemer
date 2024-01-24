@@ -57,8 +57,10 @@ func main() {
             fmt.Println("New order.")
             if btn.Button == elevio.BT_Cab {
                 addToQueueCab(btn.Floor)
+                fmt.Println("Order added from cab")
             } else {
                 addToQueueFromFloorPanel(btn.Floor, btn.Button)
+                fmt.Println("Order added from ")
             }
             elevio.SetButtonLamp(btn.Button, btn.Floor, true)
 

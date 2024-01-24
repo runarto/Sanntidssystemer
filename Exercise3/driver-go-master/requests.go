@@ -106,7 +106,6 @@ func orderCompleteCheck() int {
 			} 
 			if OrderArray[i][1] == Down && LastDefinedFloor > OrderArray[i][0] {
 				OrderComplete = removeOrdersAtFloor(OrderArray[i][0])
-				break
 			}
 		}
 	}
