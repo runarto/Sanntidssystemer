@@ -102,11 +102,13 @@ func orderCompleteCheck(currentFloor int) int {
 
 
     switch (CurrentState) {
+    
 
     case Moving:
         switch (CurrentDirection) {
 
         case Up:
+            fmt.Println("The current state is", CurrentState, ",and the direction is", CurrentDirection)
             for i := 0; i < MaxOrders; i++ {
                 if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
                     OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
