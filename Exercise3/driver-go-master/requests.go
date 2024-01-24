@@ -65,7 +65,7 @@ func addToQueueCab(toFloor int) {
                 (CurrentDirectionAlt == Down)) {
                 OrderArray[i][1] = CabUp
                 OrderArray[i][2] = True
-                fmt.Println("Order added successfully")
+                fmt.Println("Order added successfully, up")
                 return
             }
 
@@ -74,7 +74,7 @@ func addToQueueCab(toFloor int) {
                 CurrentDirectionAlt == Up) {
                 OrderArray[i][1] = CabDown
                 OrderArray[i][2] = True
-                fmt.Println("Order added successfully")
+                fmt.Println("Order added successfully, down")
                 return
             }
         }
