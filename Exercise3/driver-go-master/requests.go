@@ -99,6 +99,7 @@ func addToQueueCab(toFloor int) {
 func orderCompleteCheck(currentFloor int) int {
 	OrderComplete := 0
     fmt.Println("The current floor is:", currentFloor)
+    fmt.Println("The current state is", CurrentState, ",and the direction is", CurrentDirection)
 
 
     switch (CurrentState) {
@@ -108,7 +109,6 @@ func orderCompleteCheck(currentFloor int) int {
         switch (CurrentDirection) {
 
         case Up:
-            fmt.Println("The current state is", CurrentState, ",and the direction is", CurrentDirection)
             for i := 0; i < MaxOrders; i++ {
                 if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
                     OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
