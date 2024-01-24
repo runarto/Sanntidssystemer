@@ -89,6 +89,7 @@ func main() {
 
             switch (CurrentState) {
             case Moving:
+                fmt.Println("Elevator arrived at floor while moving.")
 
                 if orderCompleteCheck(floor) != 0 {
                     elevatorStill()
@@ -99,6 +100,7 @@ func main() {
             
             case Still:
 
+                fmt.Println("Elevator arrived at floor while still.")
                 moveElevator(elevatorDirection())
             }
 

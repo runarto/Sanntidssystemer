@@ -108,6 +108,7 @@ func orderCompleteCheck(currentFloor int) int {
 			}
 		}
 	}
+    fmt.Println(OrderComplete, "orders completed.")
 	return OrderComplete
 }
 
@@ -126,6 +127,7 @@ func removeOrdersAtFloor(floor int, entry int) int {
         
         for j := 0; j < 3; j++ {
             OrderArray[entry][j] = NotDefined
+            print("Order removed from array.")
         }
     }
 
