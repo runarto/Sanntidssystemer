@@ -67,7 +67,7 @@ func main() {
             switch (CurrentState) {
             case Moving:
 
-                if orderCompleteCheck() != 0 {
+                if orderCompleteCheck(LastDefinedFloor) != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
@@ -85,13 +85,12 @@ func main() {
         case floor := <-drv_floors:
 
             fmt.Println("Arrived at new floor")
-            LastDefinedFloor = floor
             floorLights()
 
             switch (CurrentState) {
             case Moving:
 
-                if orderCompleteCheck() != 0 {
+                if orderCompleteCheck(floor) != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go
@@ -111,7 +110,7 @@ func main() {
             switch (CurrentState) {
             case Moving:
 
-                if orderCompleteCheck() != 0 {
+                if orderCompleteCheck(LastDefinedFloor) != 0 {
                     elevatorStill()
                     elevatorDoorState(Open)
                     time.Sleep(3 * time.Second) // Delay in Go

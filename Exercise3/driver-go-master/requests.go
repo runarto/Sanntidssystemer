@@ -95,17 +95,16 @@ func addToQueueCab(toFloor int) {
 	}
 } */
 
-func orderCompleteCheck() int {
+func orderCompleteCheck(currentFloor int) int {
 	OrderComplete := 0
-	currentFloor := elevio.GetFloor()
 
 	for i := 0; i < MaxOrders; i++ {
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
 			if OrderArray[i][1] == Up && LastDefinedFloor < OrderArray[i][0] {
-				OrderComplete = removeOrdersAtFloor(OrderArray[i][0], i)
+				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
 			} 
 			if OrderArray[i][1] == Down && LastDefinedFloor > OrderArray[i][0] {
-				OrderComplete = removeOrdersAtFloor(OrderArray[i][0], i)
+				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
 			}
 		}
 	}
@@ -115,10 +114,8 @@ func orderCompleteCheck() int {
 
 func removeOrdersAtFloor(floor int, entry int) int {
 	OrderComplete := 0
-	currentFloor := elevio.GetFloor()
-
 	
-    if currentFloor != -1 && floor == OrderArray[entry][0] {
+    if LastDefinedFloor != -1 && floor == OrderArray[entry][0] {
         if OrderArray[entry][2] == Cab {
             elevio.SetButtonLamp(elevio.BT_Cab, floor, Off)
             OrderComplete++
