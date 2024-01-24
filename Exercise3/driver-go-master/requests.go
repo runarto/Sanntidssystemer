@@ -110,7 +110,9 @@ func orderCompleteCheck(currentFloor int) int {
             for i := 0; i < MaxOrders; i++ {
                 if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
                     OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                }  else if OrderArray[i][2] == Cab {
+                }  else if (OrderArray[i][1] == Down) && (currentFloor == OrderArray[i][0]) {
+                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                }  else if (OrderArray[i][2] == Cab) {
                     OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
                 }
             }
@@ -119,7 +121,9 @@ func orderCompleteCheck(currentFloor int) int {
             for i := 0; i < MaxOrders; i++ {
                 if (OrderArray[i][1] == Down) && (currentFloor == OrderArray[i][0]) {
                     OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
-                }  else if OrderArray[i][2] == Cab {
+                }  else if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
+                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                } else if (OrderArray[i][2] == Cab) {
                     OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
                 }
             }
