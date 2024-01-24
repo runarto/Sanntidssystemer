@@ -28,11 +28,6 @@ func printOrderArray() {
 
 func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
     for i := 0; i < MaxOrders; i++ {
-        if (OrderArray[i][0] == fromFloor) && 
-           (OrderArray[i][1] == int(button)) && 
-           (OrderArray[i][2] == NotDefined) {
-            return //Ordre kommer fra heisen
-        }
 
         if (OrderArray[i][0] == NotDefined) && 
            (OrderArray[i][1] == NotDefined) && 
@@ -46,10 +41,6 @@ func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
 
 func addToQueueCab(toFloor int) {
     for i := 0; i < MaxOrders; i++ {
-        if OrderArray[i][0] == toFloor && OrderArray[i][2] == Cab {
-            fmt.Println("Check1")
-            return
-        }
 
         if (OrderArray[i][0] == NotDefined) && 
            (OrderArray[i][1] == NotDefined) && 
@@ -60,7 +51,7 @@ func addToQueueCab(toFloor int) {
             if (LastDefinedFloor < toFloor) || 
                (LastDefinedFloor == toFloor && 
                 CurrentDirection == ElevDown) {
-                OrderArray[i][1] = FromCab
+                OrderArray[i][1] = Up
                 OrderArray[i][2] = Cab
                 fmt.Println("Order added successfully")
             }
@@ -68,7 +59,7 @@ func addToQueueCab(toFloor int) {
             if (LastDefinedFloor > toFloor) || 
                (LastDefinedFloor == toFloor && 
                 CurrentDirection == ElevUp) {
-                OrderArray[i][1] = FromCab
+                OrderArray[i][1] = Down
                 OrderArray[i][2] = Cab
                 fmt.Println("Order added successfully")
             }
@@ -103,12 +94,12 @@ func orderCompleteCheck(currentFloor int) int {
         fmt.Println("Floor of order:", OrderArray[i][0])
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
             fmt.Println("Type of order:", OrderArray[i][1])
-			if OrderArray[i][1] == FloorUp && CurrentDirection == ElevUp {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(FloorUp, i, currentFloor)
-			} else if OrderArray[i][1] == FloorDown && CurrentDirection == ElevDown {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(FloorDown, i, currentFloor)
+			if OrderArray[i][1] == CurrentDirection && LastDefinedFloor < OrderArray[i][0] {
+				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][1], i, currentFloor)
+			} else if CurrentDirection == OrderArray[i][1] && LastDefinedFloor > OrderArray[i][0] {
+				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][1], i, currentFloor)
 			} else if OrderArray[i][2] == Cab {
-                OrderComplete = OrderComplete + removeOrdersAtFloor(FromCab, i, currentFloor)
+                OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][2], i, currentFloor)
             }
 		}
 	}

@@ -19,6 +19,8 @@ const (
     Yes             = true
     No              = false
     Cab             = 1
+    Up              = 1
+    Down            = -1
 )
 
 type State int
