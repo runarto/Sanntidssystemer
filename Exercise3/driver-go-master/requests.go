@@ -114,6 +114,7 @@ func checkOrderCompletion() int {
                 processOrder(i, orderFloor, 2)
                 completedOrders++
             } else if (Direction == CurrentDirectionAlt) {
+                fmt.Println("here")
                 processOrder(i, orderFloor, Direction)
                 completedOrders++
             } else if CurrentState == Still {
