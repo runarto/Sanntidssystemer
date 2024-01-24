@@ -61,7 +61,6 @@ func main() {
                 } else {
                     addToQueueCab(btn.Floor)
                     elevio.SetButtonLamp(btn.Button, btn.Floor, true)
-                    fmt.Println("Order added from cab")
                     printOrderArray()
                 }
 
