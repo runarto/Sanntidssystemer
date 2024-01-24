@@ -28,6 +28,10 @@ func printOrderArray() {
 
 func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
     for i := 0; i < MaxOrders; i++ {
+        if (OrderArray[i][0] == fromFloor) &&
+           (OrderArray[i][1] == int(button)) {
+            return
+           }
 
         if (OrderArray[i][0] == NotDefined) && 
            (OrderArray[i][1] == NotDefined) && 
@@ -42,6 +46,12 @@ func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
 func addToQueueCab(toFloor int) {
     for i := 0; i < MaxOrders; i++ {
 
+        if (OrderArray[i][0] == toFloor) &&
+           (OrderArray[i][2] == Cab) {
+         return
+        }
+
+
         if (OrderArray[i][0] == NotDefined) && 
            (OrderArray[i][1] == NotDefined) && 
            (OrderArray[i][2] == NotDefined) {
@@ -49,10 +59,10 @@ func addToQueueCab(toFloor int) {
             fmt.Println("Check2")
 
             if (LastDefinedFloor < toFloor) || 
-               (LastDefinedFloor == toFloor && 
-                CurrentDirection == ElevDown) {
+               ((LastDefinedFloor == toFloor) && 
+                (CurrentDirection == ElevDown)) {
                 OrderArray[i][1] = Up
-                OrderArray[i][2] = Cab
+                OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
             }
 
@@ -60,7 +70,7 @@ func addToQueueCab(toFloor int) {
                (LastDefinedFloor == toFloor && 
                 CurrentDirection == ElevUp) {
                 OrderArray[i][1] = Down
-                OrderArray[i][2] = Cab
+                OrderArray[i][2] = True
                 fmt.Println("Order added successfully")
             }
         }
@@ -90,25 +100,47 @@ func orderCompleteCheck(currentFloor int) int {
 	OrderComplete := 0
     fmt.Println("The current floor is:", currentFloor)
 
-	for i := 0; i < MaxOrders; i++ {
-        fmt.Println("Floor of order:", OrderArray[i][0])
-		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
-            fmt.Println("Type of order:", OrderArray[i][1])
-			if OrderArray[i][1] == CurrentDirection && LastDefinedFloor < OrderArray[i][0] {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][1], i, currentFloor)
-			} else if CurrentDirection == OrderArray[i][1] && LastDefinedFloor > OrderArray[i][0] {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][1], i, currentFloor)
-			} else if OrderArray[i][2] == Cab {
-                OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][2], i, currentFloor)
+
+    switch (CurrentState) {
+
+    case Moving:
+        switch (CurrentDirection) {
+
+        case Up:
+            for i := 0; i < MaxOrders; i++ {
+                if (OrderArray[i][1] == Up) && (currentFloor == OrderArray[i][0]) {
+                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                }  else if OrderArray[i][2] == Cab {
+                    OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
+                }
             }
-		}
-	}
-    fmt.Println(OrderComplete, "orders completed.")
+
+        case Down: 
+            for i := 0; i < MaxOrders; i++ {
+                if (OrderArray[i][1] == Down) && (currentFloor == OrderArray[i][0]) {
+                    OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                }  else if OrderArray[i][2] == Cab {
+                    OrderComplete = removeOrder(OrderArray[i][2], i, currentFloor)
+                }
+            }
+        }
+
+    case Still:
+
+        for i := 0; i < MaxOrders; i++ {
+            if (currentFloor == OrderArray[i][0]) {
+                OrderComplete = removeOrder(OrderArray[i][1], i, currentFloor)
+                OrderComplete = OrderComplete + removeOrder(OrderArray[i][2], i, currentFloor)
+            }
+        }
+
+
+    }
 	return OrderComplete
 }
 
 
-func removeOrdersAtFloor(ButtonType int, entry int, currentFloor int) int {
+func removeOrder(ButtonType int, entry int, currentFloor int) int {
 	OrderComplete := 0
 
     elevio.SetButtonLamp(elevio.ButtonType(ButtonType), currentFloor, Off)

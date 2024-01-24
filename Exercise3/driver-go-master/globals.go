@@ -2,8 +2,6 @@ package main
 
 const (
     MaxOrders       = 12
-    True            = true
-    False           = false
     On              = true
     Off             = false
     Open            = 1
@@ -16,8 +14,8 @@ const (
     FromCab         = 2
     numFloors       = 4
     numButtons      = 3
-    Yes             = true
-    No              = false
+    True            = 1
+    False           = 0
     Cab             = 1
     Up              = 1
     Down            = -1
