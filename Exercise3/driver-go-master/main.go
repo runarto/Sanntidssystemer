@@ -62,20 +62,20 @@ func main() {
                     addToQueueCab(btn.Floor)
                     elevio.SetButtonLamp(btn.Button, btn.Floor, true)
                     fmt.Println("Order added from cab")
+                    printOrderArray()
                 }
 
             } else {
                 addToQueueFromFloorPanel(btn.Floor, int(btn.Button))
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
                 fmt.Println("Order added from floor panel")
+                printOrderArray()
             }
 
             if (CurrentState == Still) {
                 fmt.Println("Moving elevator")
                 moveElevator(elevatorDirection())
             }
-            
-            printOrderArray()
 
         case floor := <-drv_floors:
 
