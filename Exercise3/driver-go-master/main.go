@@ -74,8 +74,9 @@ func main() {
                 fmt.Println("Order added from ")
             }
 
-
-            moveElevator(elevatorDirection())
+            if (CurrentState == Still) {
+                moveElevator(elevatorDirection())
+            }
             
             printOrderArray()
 
