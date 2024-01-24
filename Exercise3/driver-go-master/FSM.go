@@ -93,6 +93,8 @@ func moveElevator(Direction elevio.MotorDirection) {
 func elevatorAtFloor() {
     elevatorStill()
     elevatorDoorState(Open)
+    newDirection := elevatorDirection()
     time.Sleep(3 * time.Second) // Delay in Go
     elevatorDoorState(Close)
+    moveElevator(newDirection)
 }

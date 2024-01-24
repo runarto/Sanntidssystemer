@@ -84,7 +84,6 @@ func main() {
 
             if checkOrderCompletion() > 0 {
                 elevatorAtFloor()
-                moveElevator(elevatorDirection())
             }
 
         case obstr := <-drv_obstr:
