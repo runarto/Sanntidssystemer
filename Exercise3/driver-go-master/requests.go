@@ -97,6 +97,7 @@ func addToQueueCab(toFloor int) {
 
 func orderCompleteCheck(currentFloor int) int {
 	OrderComplete := 0
+    fmt.Println("The current floor is: ", currentFloor)
 
 	for i := 0; i < MaxOrders; i++ {
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
