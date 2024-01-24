@@ -64,6 +64,8 @@ func main() {
             }
             elevio.SetButtonLamp(btn.Button, btn.Floor, true)
 
+
+
             switch (CurrentState) {
             case Moving:
 
@@ -85,7 +87,7 @@ func main() {
         case floor := <-drv_floors:
 
             fmt.Println("Arrived at new floor")
-            floorLights()
+            floorLights(floor)
 
             switch (CurrentState) {
             case Moving:

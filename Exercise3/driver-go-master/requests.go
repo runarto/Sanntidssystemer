@@ -103,12 +103,13 @@ func orderCompleteCheck(currentFloor int) int {
         fmt.Println("Floor of order:", OrderArray[i][0])
 		if currentFloor != -1 && currentFloor == OrderArray[i][0] {
             fmt.Println("Type of order:", OrderArray[i][1])
-			if CurrentDirection == ElevUp {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
-			} 
-			if CurrentDirection == ElevDown {
-				OrderComplete = OrderComplete + removeOrdersAtFloor(OrderArray[i][0], i)
-			}
+			if OrderArray[i][1] == FloorUp && CurrentDirection == ElevUp {
+				OrderComplete = OrderComplete + removeOrdersAtFloor(FloorUp, i, currentFloor)
+			} else if OrderArray[i][1] == FloorDown && CurrentDirection == ElevDown {
+				OrderComplete = OrderComplete + removeOrdersAtFloor(FloorDown, i, currentFloor)
+			} else if OrderArray[i][2] == Cab {
+                OrderComplete = OrderComplete + removeOrdersAtFloor(FromCab, i, currentFloor)
+            }
 		}
 	}
     fmt.Println(OrderComplete, "orders completed.")
@@ -116,24 +117,16 @@ func orderCompleteCheck(currentFloor int) int {
 }
 
 
-func removeOrdersAtFloor(floor int, entry int) int {
+func removeOrdersAtFloor(ButtonType int, entry int, currentFloor int) int {
 	OrderComplete := 0
-	
-    if floor != -1 && floor == OrderArray[entry][0] {
-        if OrderArray[entry][2] == Cab {
-            elevio.SetButtonLamp(elevio.BT_Cab, floor, Off)
-            OrderComplete++
-        } else {
-            elevio.SetButtonLamp(elevio.ButtonType(OrderArray[entry][1]), floor, Off)
-            OrderComplete++
-        }
-        
-        for j := 0; j < 3; j++ {
-            OrderArray[entry][j] = NotDefined
-            print("Order removed from array.")
-        }
-    }
 
+    elevio.SetButtonLamp(elevio.ButtonType(ButtonType), currentFloor, Off)
+
+    for j := 0; j < 3; j++ {
+        OrderArray[entry][j] = NotDefined
+    }
+	
+    OrderComplete++
 	return OrderComplete
 }
 

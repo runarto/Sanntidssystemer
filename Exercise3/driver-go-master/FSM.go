@@ -61,11 +61,10 @@ func elevatorStill() {
 }
 
 
-func floorLights() {
-    currentFloor := elevio.GetFloor();
-    if (currentFloor >= 0 && currentFloor <= 3) {
-        elevio.SetFloorIndicator(currentFloor);
-        LastDefinedFloor = currentFloor;
+func floorLights(floor int) {
+    if (floor >= 0 && floor <= 3) {
+        elevio.SetFloorIndicator(floor);
+        LastDefinedFloor = floor;
     }
     
 }
