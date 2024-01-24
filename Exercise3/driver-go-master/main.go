@@ -84,22 +84,16 @@ func main() {
             fmt.Println("Arrived at new floor")
             floorLights(floor)
 
-            switch (CurrentState) {
-            case Moving:
-                fmt.Println("Elevator arrived at floor while moving.")
-
-                if checkOrderCompletion() > 0 {
-                    elevatorStill()
-                    elevatorDoorState(Open)
-                    time.Sleep(3 * time.Second) // Delay in Go
-                    elevatorDoorState(Close)
-                }
             
-            case Still:
 
-                fmt.Println("Elevator arrived at floor while still.")
-                moveElevator(elevatorDirection())
+            if checkOrderCompletion() > 0 {
+                elevatorStill()
+                elevatorDoorState(Open)
+                time.Sleep(3 * time.Second) // Delay in Go
+                elevatorDoorState(Close)
             }
+
+            moveElevator(elevatorDirection())
 
         case obstr := <-drv_obstr:
             if obstr {
