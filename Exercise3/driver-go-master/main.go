@@ -92,29 +92,15 @@ func main() {
                 elevatorDoorState(Open)
                 time.Sleep(3 * time.Second) // Delay in Go
                 elevatorDoorState(Close)
+                moveElevator(elevatorDirection())
             }
-
-            moveElevator(elevatorDirection())
 
         case obstr := <-drv_obstr:
             if obstr {
                 Obstruction()
             }
 
-            switch (CurrentState) {
-            case Moving:
-
-                if checkOrderCompletion() > 0 {
-                    elevatorStill()
-                    elevatorDoorState(Open)
-                    time.Sleep(3 * time.Second) // Delay in Go
-                    elevatorDoorState(Close)
-                }
-            
-            case Still:
-
-                moveElevator(elevatorDirection())
-            }
+            moveElevator(elevatorDirection())
 
 
         case stop := <-drv_stop:
