@@ -3,7 +3,6 @@ package main
 import (
     "fmt"
     "Exercise3/elevio"
-    "time"
     "sync"
 )
 
@@ -58,10 +57,7 @@ func main() {
             if btn.Button == elevio.BT_Cab {
 
                 if btn.Floor == currentFloor {
-                    elevatorStill()
-                    elevatorDoorState(Open)
-                    time.Sleep(3 * time.Second) // Delay in Go
-                    elevatorDoorState(Close)
+                    elevatorAtFloor()
                 } else {
                     addToQueueCab(btn.Floor)
                     elevio.SetButtonLamp(btn.Button, btn.Floor, true)
@@ -71,10 +67,11 @@ func main() {
             } else {
                 addToQueueFromFloorPanel(btn.Floor, int(btn.Button))
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
-                fmt.Println("Order added from ")
+                fmt.Println("Order added from floor panel")
             }
 
             if (CurrentState == Still) {
+                fmt.Println("Moving elevator")
                 moveElevator(elevatorDirection())
             }
             
@@ -85,13 +82,8 @@ func main() {
             fmt.Println("Arrived at new floor")
             floorLights(floor)
 
-            
-
             if checkOrderCompletion() > 0 {
-                elevatorStill()
-                elevatorDoorState(Open)
-                time.Sleep(3 * time.Second) // Delay in Go
-                elevatorDoorState(Close)
+                elevatorAtFloor()
                 moveElevator(elevatorDirection())
             }
 

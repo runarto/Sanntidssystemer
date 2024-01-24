@@ -104,33 +104,34 @@ func checkOrderCompletion() int {
     completedOrders := 0
 
     for i := 0; i < MaxOrders; i++ {
-        floor := OrderArray[i][0]
-        direction := OrderArray[i][1]
+        orderFloor := OrderArray[i][0]
+        Direction := OrderArray[i][1]
         fromCab := OrderArray[i][2]
     
         // Check if the current floor matches the order floor
-        if currentFloor == floor {
+        if currentFloor == orderFloor {
             if (fromCab == 1) {
-                processOrder(i, floor, 2)
+                processOrder(i, orderFloor, 2)
                 completedOrders++
-            } else if (direction == CurrentDirectionAlt) {
-                processOrder(i, floor, direction)
+            } else if (Direction == CurrentDirectionAlt) {
+                processOrder(i, orderFloor, Direction)
                 completedOrders++
             } else if CurrentState == Still {
-                processOrder(i, floor, 2)
+                processOrder(i, orderFloor, 0)
+                processOrder(i, orderFloor, 1)
                 completedOrders++
             // Existing logic for handling orders on the current floor
             } else {
             // General handling for orders from other floors
             switch {
-                case direction == Up && CurrentDirectionAlt != Down && floor < currentFloor:
+                case Direction == Up && CurrentDirectionAlt == Down && orderFloor < currentFloor:
                 // Handle an Up order when the elevator is above the order floor and not moving Down
-                processOrder(i, floor, direction)
+                processOrder(i, orderFloor, Direction)
                 completedOrders++
     
-                case direction == Down && CurrentDirectionAlt != Up && floor > currentFloor:
+                case Direction == Down && CurrentDirectionAlt == Up && orderFloor > currentFloor:
                 // Handle a Down order when the elevator is below the order floor and not moving Up
-                processOrder(i, floor, direction)
+                processOrder(i, orderFloor, Direction)
                 completedOrders++
                 }
             }

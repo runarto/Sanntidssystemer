@@ -78,16 +78,21 @@ func moveElevator(Direction elevio.MotorDirection) {
         CurrentDirection = ElevDown
         CurrentDirectionAlt = Down
         CurrentState = Moving
-        fmt.Println("Now moving down") 
     } else if Direction == elevio.MD_Up {
         elevio.SetMotorDirection(elevio.MD_Up)
         CurrentDirection = ElevUp
         CurrentDirectionAlt = Up
         CurrentState = Moving
-        fmt.Println("Now moving up") 
     } else {
         elevio.SetMotorDirection(elevio.MD_Stop)
         CurrentState = Still
-        fmt.Println("Elevator stopped")
     }
+}
+
+
+func elevatorAtFloor() {
+    elevatorStill()
+    elevatorDoorState(Open)
+    time.Sleep(3 * time.Second) // Delay in Go
+    elevatorDoorState(Close)
 }
