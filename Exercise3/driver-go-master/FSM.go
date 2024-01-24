@@ -20,7 +20,7 @@ func nullButtons() {
 
 
 func initElevator() {
-    nullButtons()
+    //nullButtons()
     elevatorDoorState(Close)
     
     for floor := elevio.GetFloor(); floor != 0; floor = elevio.GetFloor() {
