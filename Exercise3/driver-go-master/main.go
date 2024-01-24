@@ -69,7 +69,7 @@ func main() {
                 }
 
             } else {
-                addToQueueFromFloorPanel(btn.Floor, btn.Button)
+                addToQueueFromFloorPanel(btn.Floor, int(btn.Button))
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
                 fmt.Println("Order added from ")
             }

@@ -28,10 +28,10 @@ func printOrderArray() {
 
 // fromFloor: etasje input kommer fra, button: type (opp, ned, cab)
 
-func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
+func addToQueueFromFloorPanel(fromFloor int, button int) {
     for i := 0; i < MaxOrders; i++ {
         if (OrderArray[i][0] == fromFloor) &&
-           (OrderArray[i][1] == int(button)) {
+           (OrderArray[i][1] == button) {
             return
            }
 
@@ -39,7 +39,7 @@ func addToQueueFromFloorPanel(fromFloor int, button elevio.ButtonType) {
            (OrderArray[i][1] == NotDefined) && 
            (OrderArray[i][2] == NotDefined) {
             OrderArray[i][0] = fromFloor
-            OrderArray[i][1] = int(button)
+            OrderArray[i][1] = button
             return
         }
     }
