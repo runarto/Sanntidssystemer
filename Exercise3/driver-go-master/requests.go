@@ -127,7 +127,6 @@ func checkOrderCompletion() int {
         if fromCab == 1 && currentFloor == orderFloor {
             processOrder(i, orderFloor, 2) // Process the cab order
             completedOrders++
-            continue // Move to the next order
         }
 
         // Process external orders (from outside the elevator)
@@ -137,18 +136,18 @@ func checkOrderCompletion() int {
             if direction == CurrentDirectionAlt || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
-                continue
+                
             }
             if (currentFloor == 3 && CurrentDirectionAlt == Up) {
                 processOrder(i, orderFloor, 1) //Hvis du er i tredje etasje, skal du ned
                 completedOrders++
-                continue
+                
             }
     
             if (currentFloor == 0 && CurrentDirectionAlt == Down) {
                 processOrder(i, orderFloor, 0)
                 completedOrders++
-                continue
+                
             }
         
 
@@ -215,7 +214,7 @@ func elevatorDirection() elevio.MotorDirection {
                     return elevio.MD_Up
                 }
             }
-        }
+        } 
     }
     fmt.Println("oops, elevator has no orders")
     return elevio.MD_Stop
