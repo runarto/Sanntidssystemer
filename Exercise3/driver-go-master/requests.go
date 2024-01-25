@@ -110,6 +110,15 @@ func checkOrderCompletion() int {
         direction := OrderArray[i][1]   // 0 for up, 1 for down
         fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
 
+        if numOfOrders == 1 {
+            if (fromCab == 0 && currentFloor == orderFloor) {
+                processOrder(i, orderFloor, direction)
+                completedOrders++
+                return completedOrders
+            }
+        }
+        
+
         // Process orders from the cab
         if fromCab == 1 && currentFloor == orderFloor {
             processOrder(i, orderFloor, 2) // Process the cab order
@@ -125,12 +134,6 @@ func checkOrderCompletion() int {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
             }
-
-        if numOfOrders == 1 {
-            if (fromCab == 0 && currentFloor == orderFloor) {
-                processOrder(i, orderFloor, direction)
-            }
-        }
         
 
     }
