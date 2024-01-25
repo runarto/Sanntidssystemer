@@ -131,8 +131,12 @@ func checkOrderCompletion() int {
         if fromCab == True && currentFloor == orderFloor {
             processOrder(i, orderFloor, 2) // Process the cab order
             completedOrders++
-        } else if currentFloor == orderFloor {
-            
+        }
+
+        // Process external orders (from outside the elevator)
+        if fromCab == False && currentFloor == orderFloor {
+            // Check if the direction of the order matches the elevator's current direction
+            // or if the elevator is currently idle (can be represented by a specific value or condition)
             if direction == CurrentDirectionAlt || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
@@ -149,6 +153,7 @@ func checkOrderCompletion() int {
                 completedOrders++
                 
             }
+        
 
     }
     
