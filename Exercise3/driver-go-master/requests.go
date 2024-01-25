@@ -115,8 +115,12 @@ func checkOrderCompletion() int {
         fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
 
         if numOfOrders == 1 {
-            if (fromCab == 0 && currentFloor == orderFloor) {
+            if (fromCab == False && currentFloor == orderFloor) {
                 processOrder(i, orderFloor, direction)
+                completedOrders++
+                return completedOrders
+            } else {
+                processOrder(i, orderFloor, 2)
                 completedOrders++
                 return completedOrders
             }
@@ -124,15 +128,11 @@ func checkOrderCompletion() int {
         
 
         // Process orders from the cab
-        if fromCab == 1 && currentFloor == orderFloor {
+        if fromCab == True && currentFloor == orderFloor {
             processOrder(i, orderFloor, 2) // Process the cab order
             completedOrders++
-        }
-
-        // Process external orders (from outside the elevator)
-        if fromCab == 0 && currentFloor == orderFloor {
-            // Check if the direction of the order matches the elevator's current direction
-            // or if the elevator is currently idle (can be represented by a specific value or condition)
+        } else if currentFloor == orderFloor {
+            
             if direction == CurrentDirectionAlt || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
@@ -149,7 +149,6 @@ func checkOrderCompletion() int {
                 completedOrders++
                 
             }
-        
 
     }
     
