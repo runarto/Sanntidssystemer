@@ -119,10 +119,12 @@ func checkOrderCompletion() int {
         }
 
         nextDirection := getNextMotorDirection(i) //Down
+        print(nextDirection)
 
 
         if numOfOrders == 1 || nextDirection == -1 {
             if (fromCab == False && currentFloor == orderFloor) {
+                print("here")
                 processOrder(i, orderFloor, direction)
                 completedOrders++
                 return completedOrders
