@@ -118,7 +118,7 @@ func checkOrderCompletion() int {
             continue
         }
 
-        nextDirection := getNextMotorDirection(i) //Down
+        nextDirection := getNextMotorDirection(i) //Up
 
         fmt.Println("Next direction is", nextDirection)
 
@@ -136,7 +136,7 @@ func checkOrderCompletion() int {
         
 
         // Process orders from the cab
-        if fromCab == True && currentFloor == orderFloor {
+        if fromCab == True && currentFloor == orderFloor && direction == nextDirection {
             processOrder(i, orderFloor, 2) // Process the cab order
             completedOrders++
             fmt.Println("Order completed from cab.")
