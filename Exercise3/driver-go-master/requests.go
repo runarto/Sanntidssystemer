@@ -118,9 +118,8 @@ func checkOrderCompletion() int {
             continue
         }
 
-        nextDirection := getNextMotorDirection(i) //Up
+        nextDirection := getNextMotorDirection(i) //Down
 
-        fmt.Println("Next direction is", nextDirection)
 
         if numOfOrders == 1 || nextDirection == -1 {
             if (fromCab == False && currentFloor == orderFloor) {
@@ -133,6 +132,37 @@ func checkOrderCompletion() int {
                 return completedOrders
             }
         }
+
+        if ((fromCab == True && currentFloor == orderFloor)) {
+            processOrder(i, orderFloor, 2) // Process the cab order
+            completedOrders++
+            fmt.Println("Order completed from cab.")
+        }
+
+        if (fromCab == False && currentFloor == orderFloor) {
+
+            if (direction == Up && CurrentDirection == ElevUp || (direction == Down && nextDirection == Down)) {
+                processOrder(i, orderFloor, direction) // Process the external order
+                completedOrders++
+                fmt.Println("Order completed from floor")
+                continue
+            }
+
+            if (direction == Down && CurrentDirection == ElevDown || (direction == Up && nextDirection == Up)) {
+                processOrder(i, orderFloor, direction) // Process the external order
+                completedOrders++
+                fmt.Println("Order completed from floor")
+                continue
+            }
+
+
+
+
+        }
+
+
+
+/*         fmt.Println("Next direction is", nextDirection)
         
 
         // Process orders from the cab
@@ -170,14 +200,13 @@ func checkOrderCompletion() int {
             }
         
 
-    }
+    } */
     
     }
     fmt.Println("Order complete")
     return completedOrders
 }
 
-// Additional functions like processOrder will be defined here...
 
     
 func processOrder(index int, floor int, direction int) {
