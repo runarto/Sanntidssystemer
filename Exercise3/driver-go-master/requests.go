@@ -103,6 +103,7 @@ func addToQueueCab(toFloor int) {
 
 func checkOrderCompletion() int {
     completedOrders := 0
+    numOfOrders := amountOfOrders()
 
     for i := 0; i < MaxOrders; i++ {
         orderFloor := OrderArray[i][0]
@@ -124,7 +125,16 @@ func checkOrderCompletion() int {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
             }
+
+        if numOfOrders == 1 {
+            if (fromCab == 0 && currentFloor == orderFloor) {
+                processOrder(i, orderFloor, direction)
+            }
         }
+        
+
+    }
+    
     }
     fmt.Println("Order complete")
     return completedOrders
