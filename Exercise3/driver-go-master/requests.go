@@ -105,6 +105,10 @@ func checkOrderCompletion() int {
     completedOrders := 0
     numOfOrders := amountOfOrders()
 
+    if numOfOrders == 0 {
+        return 0
+    }
+
     for i := 0; i < MaxOrders; i++ {
         orderFloor := OrderArray[i][0]
         direction := OrderArray[i][1]   // 0 for up, 1 for down
@@ -121,11 +125,13 @@ func checkOrderCompletion() int {
         if (currentFloor == 3 && CurrentDirectionAlt == Up) {
             processOrder(i, orderFloor, 1)
             completedOrders++
+            continue
         }
 
         if (currentFloor == 0 && CurrentDirectionAlt == Down) {
             processOrder(i, orderFloor, 0)
             completedOrders++
+            continue
         }
         
 
