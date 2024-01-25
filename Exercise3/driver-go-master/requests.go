@@ -114,6 +114,8 @@ func checkOrderCompletion() int {
         direction := OrderArray[i][1]   // 0 for up, 1 for down
         fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
 
+        nextDirection := getNextMotorDirection()
+
         if numOfOrders == 1 {
             if (fromCab == False && currentFloor == orderFloor) {
                 processOrder(i, orderFloor, direction)
@@ -135,20 +137,19 @@ func checkOrderCompletion() int {
 
         // Process external orders (from outside the elevator)
         if fromCab == False && currentFloor == orderFloor {
-            // Check if the direction of the order matches the elevator's current direction
-            // or if the elevator is currently idle (can be represented by a specific value or condition)
-            if direction == CurrentDirectionAlt || CurrentState == Still {
+        
+            if direction == nextDirection || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
                 
             }
-            if (currentFloor == 3 && CurrentDirectionAlt == Up) {
+            if (currentFloor == 3 && nextDirection == Down) {
                 processOrder(i, orderFloor, 1) //Hvis du er i tredje etasje, skal du ned
                 completedOrders++
                 
             }
     
-            if (currentFloor == 0 && CurrentDirectionAlt == Down) {
+            if (currentFloor == 0 && nextDirection == Up) {
                 processOrder(i, orderFloor, 0)
                 completedOrders++
                 
@@ -232,4 +233,32 @@ func Obstruction() {
     }
 
     elevio.SetDoorOpenLamp(Off)
+}
+
+
+func getNextMotorDirection() int {
+    if CurrentDirection == ElevUp {
+        fmt.Println("Last direction was up. ")
+        for i := 0; i < MaxOrders; i++ {
+            if OrderArray[i][0] > currentFloor && OrderArray[i][0] != NotDefined {
+                fmt.Println("Elevator go up")
+                return Up
+            } else if OrderArray[i][0] < currentFloor && OrderArray[i][0] != NotDefined {
+                fmt.Println("Elevator go down")
+                return Down
+            }
+        }
+    } else if CurrentDirection == ElevDown {
+        fmt.Println("Last direction was down.")
+        for i := 0; i < MaxOrders; i++ {
+            if OrderArray[i][0] < currentFloor && OrderArray[i][0] != NotDefined {
+                fmt.Println("Elevator go down")
+                return Down
+            } else if OrderArray[i][0] > currentFloor && OrderArray[i][0] != NotDefined {
+                fmt.Println("Elevator go up")
+                return Up
+            }
+        }
+    } 
+    return -1
 }
