@@ -155,6 +155,13 @@ func checkOrderCompletion() int {
                 continue
             }
 
+            if ( (currentFloor == 3 && direction == Up) || (currentFloor == 0 && direction == Down)) {
+                processOrder(i, orderFloor, direction) // Process the external order
+                completedOrders++
+                fmt.Println("Order completed from floor")
+                continue
+            }
+
 
 
 
