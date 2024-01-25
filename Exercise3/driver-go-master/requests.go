@@ -117,6 +117,11 @@ func checkOrderCompletion() int {
                 return completedOrders
             }
         }
+
+        if (currentFloor == 4 || currentFloor == 1) {
+            processOrder(i, orderFloor, direction)
+            completedOrders++
+        }
         
 
         // Process orders from the cab
@@ -133,6 +138,7 @@ func checkOrderCompletion() int {
             if direction == CurrentDirectionAlt || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
+                continue
             }
         
 
