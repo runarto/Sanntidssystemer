@@ -122,7 +122,7 @@ func checkOrderCompletion() int {
         fmt.Println("The next direction is", nextDirection)
 
 
-        if numOfOrders == 1 || nextDirection == -1 {
+        if numOfOrders == 1 {
             if (fromCab == False && currentFloor == orderFloor) {
                 print("here")
                 processOrder(i, orderFloor, direction)
@@ -143,7 +143,7 @@ func checkOrderCompletion() int {
 
         if (fromCab == False && currentFloor == orderFloor) {
 
-            if (direction == Up && CurrentDirection == ElevUp || (direction == Down && nextDirection == Down)) {
+            if ( (direction == Up && CurrentDirection == ElevUp) || (direction == Down && nextDirection == Down)) {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
                 fmt.Println("Order completed from floor")
