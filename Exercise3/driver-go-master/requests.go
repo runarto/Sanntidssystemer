@@ -118,7 +118,7 @@ func checkOrderCompletion() int {
             continue
         }
 
-        nextDirection := getNextMotorDirection(i)
+        nextDirection := getNextMotorDirection(i) //Down
 
         if numOfOrders == 1 || nextDirection == -1 {
             if (fromCab == False && currentFloor == orderFloor) {
@@ -145,17 +145,20 @@ func checkOrderCompletion() int {
             if direction == nextDirection || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
                 completedOrders++
+                continue
                 
             }
             if (currentFloor == 3 && nextDirection == Down) {
                 processOrder(i, orderFloor, 1) //Hvis du er i tredje etasje, skal du ned
                 completedOrders++
+                continue
                 
             }
     
             if (currentFloor == 0 && nextDirection == Up) {
                 processOrder(i, orderFloor, 0)
                 completedOrders++
+                continue
                 
             }
         
