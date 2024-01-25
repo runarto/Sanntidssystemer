@@ -271,9 +271,9 @@ func getNextMotorDirection(i int) int {
             return Up    
         } else {
             if (OrderArray[i+1][2] == True) {
-                return Down 
+                return Up 
             } else {
-                return Up
+                return Down
             }
 
         }
