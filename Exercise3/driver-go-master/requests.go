@@ -155,7 +155,9 @@ func amountOfOrders() int {
 
 func elevatorDirection() elevio.MotorDirection {
     if IsDoorOpen == Close && amountOfOrders() > 0 {
+        print("Door is open, and amount of orders is greater than one.")
         if CurrentDirection == ElevUp {
+            print("Last direction was up. ")
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] > LastDefinedFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go up")
@@ -166,6 +168,7 @@ func elevatorDirection() elevio.MotorDirection {
                 }
             }
         } else if CurrentDirection == ElevDown {
+            print("Last direction was down.")
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] < LastDefinedFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go down")

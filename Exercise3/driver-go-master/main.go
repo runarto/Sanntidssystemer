@@ -72,7 +72,6 @@ func main() {
             }
 
             if (CurrentState == Still) {
-                elevatorDoorState(Close)
                 moveElevator(elevatorDirection())
             }
 
