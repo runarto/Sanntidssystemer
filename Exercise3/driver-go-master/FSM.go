@@ -93,7 +93,10 @@ func moveElevator(Direction elevio.MotorDirection) {
 func elevatorAtFloor() {
     elevatorStill()
     elevatorDoorState(Open)
-    time.Sleep(3 * time.Second) // Delay in Go
-    elevatorDoorState(Close)
-    moveElevator(elevatorDirection())
+    
+    go func() {
+        time.Sleep(3 * time.Second) // Non-blocking sleep in a separate goroutine
+        elevatorDoorState(Close)    // Close the door after the sleep period
+        moveElevator(elevatorDirection()) // Determine and move to the next direction
+    }()
 }
