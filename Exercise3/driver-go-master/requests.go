@@ -289,10 +289,10 @@ func Obstruction() {
 
 
 func getNextMotorDirection(i int) int {
-    if CurrentDirection == ElevUp {
-        if (OrderArray[i+1][0] > currentFloor && OrderArray[i][0] != -1) {
+    if CurrentDirection == ElevUp && OrderArray[i+1][0] != -1 {
+        if (OrderArray[i+1][0] > currentFloor) {
             return Up
-        } else if (OrderArray[i+1][0] < currentFloor && OrderArray[i][0] != -1) {
+        } else if (OrderArray[i+1][0] < currentFloor) {
             return Down
         } else {
             if (OrderArray[i+1][2] == True) {
@@ -302,10 +302,10 @@ func getNextMotorDirection(i int) int {
             }
         }
         // blablabla
-    } else if (CurrentDirection == ElevDown) {
-        if (OrderArray[i+1][0] < currentFloor && OrderArray[i][0] != -1) {
+    } else if (CurrentDirection == ElevDown && OrderArray[i+1][0] != -1) {
+        if (OrderArray[i+1][0] < currentFloor) {
             return Down
-        } else if (OrderArray[i+1][0] > currentFloor && OrderArray[i][0] != -1) {
+        } else if (OrderArray[i+1][0] > currentFloor) {
             return Up    
         } else {
             if (OrderArray[i+1][2] == True) {
