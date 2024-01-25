@@ -106,7 +106,7 @@ func checkOrderCompletion() int {
 
     for i := 0; i < MaxOrders; i++ {
         orderFloor := OrderArray[i][0]
-        //direction := OrderArray[i][1]   // 0 for up, 1 for down
+        direction := OrderArray[i][1]   // 0 for up, 1 for down
         fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
 
         // Process orders from the cab
@@ -116,7 +116,15 @@ func checkOrderCompletion() int {
             continue // Move to the next order
         }
 
-        // Additional logic for handling other orders will be added here...
+        // Process external orders (from outside the elevator)
+        if fromCab == 0 && currentFloor == orderFloor {
+            // Check if the direction of the order matches the elevator's current direction
+            // or if the elevator is currently idle (can be represented by a specific value or condition)
+            if direction == CurrentDirection || CurrentState == Still {
+                processOrder(i, orderFloor, direction) // Process the external order
+                completedOrders++
+            }
+        }
     }
     fmt.Println("Order complete")
     return completedOrders
