@@ -121,18 +121,6 @@ func checkOrderCompletion() int {
                 return completedOrders
             }
         }
-
-        if (currentFloor == 3 && CurrentDirectionAlt == Up) {
-            processOrder(i, orderFloor, 1)
-            completedOrders++
-            continue
-        }
-
-        if (currentFloor == 0 && CurrentDirectionAlt == Down) {
-            processOrder(i, orderFloor, 0)
-            completedOrders++
-            continue
-        }
         
 
         // Process orders from the cab
@@ -148,6 +136,17 @@ func checkOrderCompletion() int {
             // or if the elevator is currently idle (can be represented by a specific value or condition)
             if direction == CurrentDirectionAlt || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
+                completedOrders++
+                continue
+            }
+            if (currentFloor == 3 && CurrentDirectionAlt == Up) {
+                processOrder(i, orderFloor, 1) //Hvis du er i tredje etasje, skal du ned
+                completedOrders++
+                continue
+            }
+    
+            if (currentFloor == 0 && CurrentDirectionAlt == Down) {
+                processOrder(i, orderFloor, 0)
                 completedOrders++
                 continue
             }
