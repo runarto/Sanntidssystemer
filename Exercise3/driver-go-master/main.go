@@ -72,7 +72,7 @@ func main() {
             }
 
             if (CurrentState == Still) {
-                fmt.Println("Moving elevator")
+                elevatorDoorState(Close)
                 moveElevator(elevatorDirection())
             }
 
