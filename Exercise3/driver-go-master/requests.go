@@ -118,7 +118,7 @@ func checkOrderCompletion() int {
 
         // Additional logic for handling other orders will be added here...
     }
-
+    print("Order complete")
     return completedOrders
 }
 
