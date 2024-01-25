@@ -114,7 +114,11 @@ func checkOrderCompletion() int {
         direction := OrderArray[i][1]   // 0 for up, 1 for down
         fromCab := OrderArray[i][2]     // 1 if from cab, 0 otherwise
 
-        nextDirection := getNextMotorDirection()
+        if (orderFloor == NotDefined) {
+            continue
+        }
+
+        nextDirection := getNextMotorDirection(i)
 
         if numOfOrders == 1 || nextDirection == -1 {
             if (fromCab == False && currentFloor == orderFloor) {
@@ -236,26 +240,32 @@ func Obstruction() {
 }
 
 
-func getNextMotorDirection() int {
+func getNextMotorDirection(i int) int {
     if CurrentDirection == ElevUp {
-        for i := 0; i < MaxOrders-1; i++ {
-            if OrderArray[i+1][0] > currentFloor && OrderArray[i+1][0] != NotDefined {
+        if (OrderArray[i+1][0] > currentFloor) {
+            return Up
+        } else if (OrderArray[i+1][0] < currentFloor) {
+            return Down
+        } else {
+            if (OrderArray[i+1][1] == Up) {
                 return Up
-            } else if OrderArray[i+1][0] < currentFloor && OrderArray[i+1][0] != NotDefined {
+            } else {
                 return Down
-            } else if OrderArray[i+1][0] == currentFloor && OrderArray[i+1][0] != NotDefined {
-                return OrderArray[i+1][1]
             }
         }
-    } else if CurrentDirection == ElevDown {
-        for i := 0; i < MaxOrders; i++ {
-            if OrderArray[i+1][0] < currentFloor && OrderArray[i+1][0] != NotDefined {
+        // blablabla
+    } else if (CurrentDirection == ElevDown) {
+        if (OrderArray[i+1][0] < currentFloor) {
+            return Down
+        } else if (OrderArray[i+1][0] > currentFloor) {
+            return Up    
+        } else {
+            if (OrderArray[i+1][1] == Up) {
+                return Up 
+            } else {
                 return Down
-            } else if OrderArray[i+1][0] > currentFloor && OrderArray[i+1][0] != NotDefined {
-                return Up
-            } else if OrderArray[i+1][0] == currentFloor && OrderArray[i+1][0] != NotDefined {
-                return OrderArray[i+1][1]
             }
+
         }
     }
     return -1
