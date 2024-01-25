@@ -121,7 +121,7 @@ func checkOrderCompletion() int {
                 processOrder(i, orderFloor, direction)
                 completedOrders++
                 return completedOrders
-            } else {
+            } else if (currentFloor == orderFloor) {
                 processOrder(i, orderFloor, 2)
                 completedOrders++
                 return completedOrders
