@@ -56,7 +56,7 @@ func main() {
             fmt.Println("New order.")
             if btn.Button == elevio.BT_Cab {
 
-                if btn.Floor == currentFloor {
+                if btn.Floor == elevio.GetFloor() {
                     elevatorAtFloor()
                 } else {
                     addToQueueCab(btn.Floor)
