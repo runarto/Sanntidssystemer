@@ -119,7 +119,7 @@ func checkOrderCompletion() int {
         }
 
         nextDirection := getNextMotorDirection(i) //Down
-        print(nextDirection)
+        fmt.Println("The next direction is", nextDirection)
 
 
         if numOfOrders == 1 || nextDirection == -1 {
@@ -290,9 +290,9 @@ func Obstruction() {
 
 func getNextMotorDirection(i int) int {
     if CurrentDirection == ElevUp {
-        if (OrderArray[i+1][0] > currentFloor) {
+        if (OrderArray[i+1][0] > currentFloor && OrderArray[i][0] != -1) {
             return Up
-        } else if (OrderArray[i+1][0] < currentFloor) {
+        } else if (OrderArray[i+1][0] < currentFloor && OrderArray[i][0] != -1) {
             return Down
         } else {
             if (OrderArray[i+1][2] == True) {
@@ -303,9 +303,9 @@ func getNextMotorDirection(i int) int {
         }
         // blablabla
     } else if (CurrentDirection == ElevDown) {
-        if (OrderArray[i+1][0] < currentFloor) {
+        if (OrderArray[i+1][0] < currentFloor && OrderArray[i][0] != -1) {
             return Down
-        } else if (OrderArray[i+1][0] > currentFloor) {
+        } else if (OrderArray[i+1][0] > currentFloor && OrderArray[i][0] != -1) {
             return Up    
         } else {
             if (OrderArray[i+1][2] == True) {
