@@ -257,10 +257,10 @@ func getNextMotorDirection(i int) int {
         } else if (OrderArray[i+1][0] < currentFloor) {
             return Down
         } else {
-            if (OrderArray[i+1][1] == Up) {
-                return Up
-            } else {
+            if (OrderArray[i+1][2] == True) {
                 return Down
+            } else {
+                return Up
             }
         }
         // blablabla
@@ -270,10 +270,10 @@ func getNextMotorDirection(i int) int {
         } else if (OrderArray[i+1][0] > currentFloor) {
             return Up    
         } else {
-            if (OrderArray[i+1][1] == Up) {
-                return Up 
+            if (OrderArray[i+1][2] == True) {
+                return Down 
             } else {
-                return Down
+                return Up
             }
 
         }
