@@ -61,13 +61,16 @@ func main() {
                 } else {
                     addToQueueCab(btn.Floor)
                     elevio.SetButtonLamp(btn.Button, btn.Floor, true)
-                    printOrderArray()
+                    
                 }
 
             } else {
                 addToQueueFromFloorPanel(btn.Floor, int(btn.Button))
                 elevio.SetButtonLamp(btn.Button, btn.Floor, true)
                 fmt.Println("Order added from floor panel")
+            }
+
+            if amountOfOrders() > 0 {
                 printOrderArray()
             }
 
