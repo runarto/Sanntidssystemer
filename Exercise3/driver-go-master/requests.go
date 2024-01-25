@@ -144,6 +144,7 @@ func checkOrderCompletion() int {
 
         // Process external orders (from outside the elevator)
         if fromCab == False && currentFloor == orderFloor {
+            fmt.Println("here")
         
             if direction == nextDirection || CurrentState == Still {
                 processOrder(i, orderFloor, direction) // Process the external order
