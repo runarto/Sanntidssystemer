@@ -239,11 +239,11 @@ func Obstruction() {
 func getNextMotorDirection() int {
     if CurrentDirection == ElevUp {
         fmt.Println("Last direction was up. ")
-        for i := 0; i < MaxOrders; i++ {
-            if OrderArray[i][1] == Up && OrderArray[i][0] != NotDefined {
+        for i := 0; i < MaxOrders-1; i++ {
+            if OrderArray[i+1][0] > currentFloor && OrderArray[i+1][0] != NotDefined {
                 fmt.Println("Elevator go up")
                 return Up
-            } else if OrderArray[i][1] == Down && OrderArray[i][0] != NotDefined {
+            } else if OrderArray[i+1][0] < currentFloor && OrderArray[i+1][0] != NotDefined {
                 fmt.Println("Elevator go down")
                 return Down
             }
@@ -251,10 +251,10 @@ func getNextMotorDirection() int {
     } else if CurrentDirection == ElevDown {
         fmt.Println("Last direction was down.")
         for i := 0; i < MaxOrders; i++ {
-            if OrderArray[i][1] == Down && OrderArray[i][0] != NotDefined {
+            if OrderArray[i+1][0] < currentFloor && OrderArray[i+1][0] != NotDefined {
                 fmt.Println("Elevator go down")
                 return Down
-            } else if OrderArray[i][1] == Up && OrderArray[i][0] != NotDefined {
+            } else if OrderArray[i+1][0] > currentFloor && OrderArray[i+1][0] != NotDefined {
                 fmt.Println("Elevator go up")
                 return Up
             }
