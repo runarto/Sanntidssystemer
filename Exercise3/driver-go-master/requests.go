@@ -118,8 +118,13 @@ func checkOrderCompletion() int {
             }
         }
 
-        if (currentFloor == 4 || currentFloor == 1) {
-            processOrder(i, orderFloor, direction)
+        if (currentFloor == 4) {
+            processOrder(i, orderFloor, 1)
+            completedOrders++
+        }
+
+        if (currentFloor == 1) {
+            processOrder(i, orderFloor, 0)
             completedOrders++
         }
         
