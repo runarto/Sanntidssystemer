@@ -118,7 +118,7 @@ func checkOrderCompletion() int {
 
         // Additional logic for handling other orders will be added here...
     }
-    print("Order complete")
+    fmt.Println("Order complete")
     return completedOrders
 }
 
@@ -155,9 +155,9 @@ func amountOfOrders() int {
 
 func elevatorDirection() elevio.MotorDirection {
     if IsDoorOpen == Close && amountOfOrders() > 0 {
-        print("Door is open, and amount of orders is greater than one.")
+        fmt.Println("Door is open, and amount of orders is greater than one.")
         if CurrentDirection == ElevUp {
-            print("Last direction was up. ")
+            fmt.Println("Last direction was up. ")
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] > currentFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go up")
@@ -168,7 +168,7 @@ func elevatorDirection() elevio.MotorDirection {
                 }
             }
         } else if CurrentDirection == ElevDown {
-            print("Last direction was down.")
+            fmt.Println("Last direction was down.")
             for i := 0; i < MaxOrders; i++ {
                 if OrderArray[i][0] < currentFloor && OrderArray[i][0] != NotDefined {
                     fmt.Println("Elevator go down")
